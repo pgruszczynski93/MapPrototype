@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28950f9e3c3a44cf8273bbcc082d661f, type: 3}
+  m_Name: MOMasterSetup
+  m_EditorClassIdentifier: 
+  cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
