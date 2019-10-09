@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4233181020137376668}
-  m_LocalRotation: {x: 0.2878107, y: -0.18513654, z: 0.056812156, w: 0.93790287}
-  m_LocalPosition: {x: 10.7, y: 15.1, z: -29.1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 34.119003, y: -22.333, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &4233181020137376642
 Camera:
   m_ObjectHideFlags: 0
@@ -96,9 +96,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraSettings:
-    cameraFov: 0
     maxZoomIn: 0
     maxZoomOut: 0
+    cameraFov: 0
+    movementDeltaMagnitudeThreshold: 0
+    mouseScrollSpeedScaler: 0
+    cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
+    cameraLookAtAngle: {x: 0, y: 0, z: 0}
   cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
-  assignedCamera: {fileID: 4233181020137376642}
+  thisCamera: {fileID: 4233181020137376642}
   thisTransform: {fileID: 4233181020137376643}

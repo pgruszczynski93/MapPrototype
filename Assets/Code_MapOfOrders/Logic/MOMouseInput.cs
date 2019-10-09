@@ -8,12 +8,34 @@ namespace Code_MapOfOrders.Logic {
     public class MOMouseInput : MonoBehaviour {
         readonly Vector3 VectorZero = Vector3.zero;
         
+        [SerializeField] MOMouseInputSetup inputSetup;
+        [SerializeField] MOMouseInputSettings inputSettings;
         [SerializeField] Camera mainCamera;
         [SerializeField] MOMouseInputData inputData;
 
+        bool initialised;
+        
         Vector3 currentMouseViewportPos;
         Vector3 lastMouseOutOfViewportPos;
         Vector3 mouseOutOfViewportPosDelta;
+
+        void Initialise() {
+            if (initialised)
+                return;
+
+            initialised = true;
+            LoadAndApplySettings();
+        }
+
+        void Start() {
+            Initialise();
+        }
+        
+        void LoadAndApplySettings() {
+            inputSettings = inputSetup.mouseInputSettings;
+            //todo: more!!
+
+        }
         
         void OnEnable() {
             AssignEvents();
@@ -25,10 +47,19 @@ namespace Code_MapOfOrders.Logic {
 
         void AssignEvents() {
             MOEvents.OnUpdate += TryToScrollMapWhenCursorIsOutOfViewport;
+            MOEvents.OnUpdate += TryToFetchScrollButtonData;
         }
 
         void RemoveEvents() {
             MOEvents.OnUpdate -= TryToScrollMapWhenCursorIsOutOfViewport;
+            MOEvents.OnUpdate -= TryToFetchScrollButtonData;
+        }
+
+        void TryToFetchScrollButtonData() {
+            if (!IsMousePresent())
+                return;
+
+            inputData.scrollValue = Input.mouseScrollDelta.y;
         }
 
         void TryToScrollMapWhenCursorIsOutOfViewport() {
@@ -41,8 +72,7 @@ namespace Code_MapOfOrders.Logic {
 
             if (!IsMouseInViewport()) {
                 mouseOutOfViewportPosDelta = currentMouseViewportPos - lastMouseOutOfViewportPos;
-                inputData.mouseAction = MouseAction.Scroll;
-                inputData.scrollValue = Input.mouseScrollDelta.y;
+                inputData.mouseAction = MouseAction.MapScroll;
                 inputData.pointerPositionDelta = mouseOutOfViewportPosDelta;
                 lastMouseOutOfViewportPos = currentMouseViewportPos;
             }
@@ -55,14 +85,18 @@ namespace Code_MapOfOrders.Logic {
 
         bool IsMouseInViewport() {
 
-            return currentMouseViewportPos.x > MOConsts.VIEWPORT_MIN
-                   && currentMouseViewportPos.x < MOConsts.VIEWPORT_MAX
-                   && currentMouseViewportPos.y > MOConsts.VIEWPORT_MIN
-                   && currentMouseViewportPos.y < MOConsts.VIEWPORT_MAX;
+            return currentMouseViewportPos.x > inputSettings.minViewportValueScrollAction
+                   && currentMouseViewportPos.x < inputSettings.maxViewportValueScrollAction
+                   && currentMouseViewportPos.y > inputSettings.minViewportValueScrollAction
+                   && currentMouseViewportPos.y < inputSettings.maxViewportValueScrollAction;
         }
 
+        bool IsMousePresent() {
+            return Input.mousePresent;
+        }
+        
         bool CanCollectMovementInput() {
-            return Input.mousePresent || !IsAnyNonScrollButtonPressed();
+            return IsMousePresent() || !IsAnyNonScrollButtonPressed();
         }
 
         bool IsAnyNonScrollButtonPressed() {

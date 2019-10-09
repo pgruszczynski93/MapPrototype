@@ -19,6 +19,8 @@
           <e p="ScriptableObjects" t="Include">
             <e p="MOCameraSettings.cs" t="Include" />
             <e p="MOCameraSetup.cs" t="Include" />
+            <e p="MOMouseInputSettings.cs" t="Include" />
+            <e p="MOMouseInputSetup.cs" t="Include" />
             <e p="MOSettings.cs" t="Include" />
           </e>
         </e>

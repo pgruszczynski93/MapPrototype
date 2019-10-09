@@ -1,4 +1,3 @@
-using System;
 using Code_MapOfOrders.Logic;
 using HGTV.MapsOfOrders;
 using UnityEngine;
@@ -9,13 +8,15 @@ namespace DefaultNamespace {
         [SerializeField] MOCameraSettings cameraSettings;
         [SerializeField] MOCameraSetup cameraSetup;
 
-        [SerializeField] Camera assignedCamera;
+        [SerializeField] Camera thisCamera;
         [SerializeField] Transform thisTransform;
 
         bool initialised;
 
         float lastPointerMovementMagnitude;
-        Vector3 lastPointerTranslation;
+        float maxZoomIn;
+        float maxZoomOut;
+        Vector3 lastPointerMovementDelta;
 
         void Start() {
             Initialise();
@@ -26,8 +27,7 @@ namespace DefaultNamespace {
                 return;
 
             initialised = true;
-            LoadSettings();
-            ApplySettings();
+            LoadAndApplySettings();
         }
 
         void OnEnable() {
@@ -47,15 +47,16 @@ namespace DefaultNamespace {
             MOEvents.OnMouseInputCollected -= HandleMouseInputCollectedReceived;
         }
 
-        void LoadSettings() {
+        void LoadAndApplySettings() {
             cameraSettings = cameraSetup.cameraSettings;
+            thisCamera.fieldOfView = cameraSettings.cameraFov;
+            thisTransform.localPosition = cameraSettings.cameraMapSpawnPosition;
+            thisTransform.localRotation = Quaternion.Euler(cameraSettings.cameraLookAtAngle);
+            var localPosZ = thisTransform.localPosition.z;
+            maxZoomIn = localPosZ + cameraSettings.maxZoomIn;
+            maxZoomOut = localPosZ + cameraSettings.maxZoomOut;
         }
 
-        void ApplySettings() {
-            assignedCamera.fieldOfView = cameraSettings.cameraFov;
-            //todo: more!!
-        }
-        
         void HandleMouseInputCollectedReceived(MOMouseInputData inputData) {
             HandleMouseAction(inputData);
         }
@@ -64,34 +65,42 @@ namespace DefaultNamespace {
             switch (inputData.mouseAction) {
                 case MouseAction.Stopped:
                     break;
-                case MouseAction.Selection:
+                case MouseAction.MapSelection:
                     break;
-                case MouseAction.Movement:
+                case MouseAction.MapMovement:
                     break;
-                case MouseAction.Scroll:
+                case MouseAction.MapScroll:
                     MoveCameraOnScroll(inputData.pointerPositionDelta);
                     break;
                 default:
                     break;
             }
+            
+            TryToZoomMap(inputData.scrollValue);
+        }
+
+        void TryToZoomMap(float scrollData) {
+            thisTransform.Translate((scrollData * cameraSettings.zoomSpeed * Vector3.forward * Time.deltaTime));
+//            var localPos = thisTransform.localPosition;
+//            thisTransform.localPosition = new Vector3(localPos.x, localPos.y, Mathf.Clamp(localPos.z, maxZoomIn, maxZoomOut));
         }
 
         void MoveCameraOnScroll(Vector3 pointerPosDelta) {
-            if (pointerPosDelta.magnitude > 0)
+            if (pointerPosDelta.sqrMagnitude > 0)
                 SetLastPointerOutOfViewportTranslation(pointerPosDelta);
             
             SetCameraPositionWhenScrolling(pointerPosDelta);
         }
 
         void SetLastPointerOutOfViewportTranslation(Vector3 pointerPosDelta) {
-            lastPointerTranslation = new Vector3(pointerPosDelta.x, 0f, pointerPosDelta.y).normalized;
+            lastPointerMovementDelta = new Vector3(pointerPosDelta.x, 0f, pointerPosDelta.y).normalized;
         }
 
         void SetCameraPositionWhenScrolling(Vector3 pointerPosDelta) {
             var currentPosition = thisTransform.localPosition;
-            var newPosition = currentPosition + lastPointerTranslation;
+            var newPosition = currentPosition + lastPointerMovementDelta;
             var smoothedPosition =
-                Vector3.Slerp(currentPosition, newPosition, Time.deltaTime * cameraSettings.mouseScrollSpeedScaller);
+                Vector3.Slerp(currentPosition, newPosition, Time.deltaTime * cameraSettings.mouseMapScrollSpeedScaler);
             thisTransform.localPosition = new Vector3(smoothedPosition.x, currentPosition.y, smoothedPosition.z);
         }
     }
