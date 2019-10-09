@@ -1,3 +1,4 @@
+using System;
 using Code_MapOfOrders.Logic;
 using HGTV.MapsOfOrders;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace DefaultNamespace {
 
         bool initialised;
 
+        float lastPointerMovementMagnitude;
+        Vector3 lastPointerTranslation;
 
         void Start() {
             Initialise();
@@ -54,8 +57,42 @@ namespace DefaultNamespace {
         }
         
         void HandleMouseInputCollectedReceived(MOMouseInputData inputData) {
-            
+            HandleMouseAction(inputData);
         }
 
+        void HandleMouseAction(MOMouseInputData inputData) {
+            switch (inputData.mouseAction) {
+                case MouseAction.Stopped:
+                    break;
+                case MouseAction.Selection:
+                    break;
+                case MouseAction.Movement:
+                    break;
+                case MouseAction.Scroll:
+                    MoveCameraOnScroll(inputData.pointerPositionDelta);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void MoveCameraOnScroll(Vector3 pointerPosDelta) {
+            if (pointerPosDelta.magnitude > 0)
+                SetLastPointerOutOfViewportTranslation(pointerPosDelta);
+            
+            SetCameraPositionWhenScrolling(pointerPosDelta);
+        }
+
+        void SetLastPointerOutOfViewportTranslation(Vector3 pointerPosDelta) {
+            lastPointerTranslation = new Vector3(pointerPosDelta.x, 0f, pointerPosDelta.y).normalized;
+        }
+
+        void SetCameraPositionWhenScrolling(Vector3 pointerPosDelta) {
+            var currentPosition = thisTransform.localPosition;
+            var newPosition = currentPosition + lastPointerTranslation;
+            var smoothedPosition =
+                Vector3.Slerp(currentPosition, newPosition, Time.deltaTime * cameraSettings.mouseScrollSpeedScaller);
+            thisTransform.localPosition = new Vector3(smoothedPosition.x, currentPosition.y, smoothedPosition.z);
+        }
     }
 }
