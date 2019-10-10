@@ -67,10 +67,11 @@ namespace DefaultNamespace {
                     break;
                 case MouseAction.MapSelection:
                     break;
-                case MouseAction.MapMovement:
+                case MouseAction.MapDragMovement:
+                    TryToInvokeDragMapMovement(inputData.pointerPositionDelta);
                     break;
-                case MouseAction.MapScroll:
-                    MoveCameraOnScroll(inputData.pointerPositionDelta);
+                case MouseAction.MapScrollMovement:
+                    TryToInvokeScrollMapMovement(inputData.pointerPositionDelta);
                     break;
                 default:
                     break;
@@ -79,13 +80,21 @@ namespace DefaultNamespace {
             TryToZoomMap(inputData.scrollValue);
         }
 
+        void TryToInvokeDragMapMovement(Vector3 pointerPosDelta) {
+            if (!(pointerPosDelta.sqrMagnitude > 0))
+                return;
+            
+            
+        }
+        
+
         void TryToZoomMap(float scrollData) {
             thisTransform.Translate((scrollData * cameraSettings.zoomSpeed * Vector3.forward * Time.deltaTime));
 //            var localPos = thisTransform.localPosition;
 //            thisTransform.localPosition = new Vector3(localPos.x, localPos.y, Mathf.Clamp(localPos.z, maxZoomIn, maxZoomOut));
         }
 
-        void MoveCameraOnScroll(Vector3 pointerPosDelta) {
+        void TryToInvokeScrollMapMovement(Vector3 pointerPosDelta) {
             if (pointerPosDelta.sqrMagnitude > 0)
                 SetLastPointerOutOfViewportTranslation(pointerPosDelta);
             

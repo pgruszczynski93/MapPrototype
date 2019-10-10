@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using DefaultNamespace;
 using HGTV.MapsOfOrders;
@@ -7,14 +8,15 @@ using Vector3 = UnityEngine.Vector3;
 namespace Code_MapOfOrders.Logic {
     public class MOMouseInput : MonoBehaviour {
         readonly Vector3 VectorZero = Vector3.zero;
-        
+
         [SerializeField] MOMouseInputSetup inputSetup;
         [SerializeField] MOMouseInputSettings inputSettings;
         [SerializeField] Camera mainCamera;
         [SerializeField] MOMouseInputData inputData;
 
         bool initialised;
-        
+
+        Vector3 mousePosition;
         Vector3 currentMouseViewportPos;
         Vector3 lastMouseOutOfViewportPos;
         Vector3 mouseOutOfViewportPosDelta;
@@ -30,13 +32,12 @@ namespace Code_MapOfOrders.Logic {
         void Start() {
             Initialise();
         }
-        
+
         void LoadAndApplySettings() {
             inputSettings = inputSetup.mouseInputSettings;
             //todo: more!!
-
         }
-        
+
         void OnEnable() {
             AssignEvents();
         }
@@ -46,13 +47,17 @@ namespace Code_MapOfOrders.Logic {
         }
 
         void AssignEvents() {
-            MOEvents.OnUpdate += TryToScrollMapWhenCursorIsOutOfViewport;
+            MOEvents.OnUpdate += UpdateMouseViewportPosition;
+            MOEvents.OnUpdate += TryToSetScrollMapInputWhenCursorIsOutOfViewport;
             MOEvents.OnUpdate += TryToFetchScrollButtonData;
+            MOEvents.OnUpdate += TryToSetDragMapInput;
         }
 
         void RemoveEvents() {
-            MOEvents.OnUpdate -= TryToScrollMapWhenCursorIsOutOfViewport;
+            MOEvents.OnUpdate -= UpdateMouseViewportPosition;
+            MOEvents.OnUpdate -= TryToSetScrollMapInputWhenCursorIsOutOfViewport;
             MOEvents.OnUpdate -= TryToFetchScrollButtonData;
+            MOEvents.OnUpdate -= TryToSetDragMapInput;
         }
 
         void TryToFetchScrollButtonData() {
@@ -62,29 +67,66 @@ namespace Code_MapOfOrders.Logic {
             inputData.scrollValue = Input.mouseScrollDelta.y;
         }
 
-        void TryToScrollMapWhenCursorIsOutOfViewport() {
+        void UpdateMouseViewportPosition() {
             //todo: change to REWIRED...
-            if (!CanCollectMovementInput())
+            if (!IsMousePresent())
                 return;
-            
-            var mousePosition = Input.mousePosition;
-            currentMouseViewportPos = mainCamera.ScreenToViewportPoint(mousePosition);
 
-            if (!IsMouseInViewport()) {
+            mousePosition = Input.mousePosition;
+            currentMouseViewportPos = mainCamera.ScreenToViewportPoint(mousePosition);
+        }
+
+
+        void TryToSetScrollMapInputWhenCursorIsOutOfViewport() {
+            if (!CanCollectMapScrollMovementInput())
+                return;
+
+            InvokeMousePositionDependentAction(
+                ResetMouseActions,
+                SetScrollMapProperties);
+
+            MOEvents.BroadcastOnMouseInput(inputData);
+        }
+
+        void ResetMouseActions() {
+            inputData.mouseAction = MouseAction.Stopped;
+        }
+
+        void SetScrollMapProperties() {
+            mouseOutOfViewportPosDelta = currentMouseViewportPos - lastMouseOutOfViewportPos;
+            inputData.mouseAction = MouseAction.MapScrollMovement;
+            inputData.pointerPositionDelta = mouseOutOfViewportPosDelta;
+            lastMouseOutOfViewportPos = currentMouseViewportPos;
+        }
+
+        void InvokeMousePositionDependentAction(Action onMouseInViewport, Action onMouseOutOfViewport) {
+            if (IsMouseInViewport())
+                onMouseInViewport?.Invoke();
+            else
+                onMouseOutOfViewport?.Invoke();
+        }
+
+        void TryToSetDragMapInput() {
+            if (!IsMousePresent())
+                return;
+
+            if (Input.GetMouseButtonDown(1)) {
+                inputData.mouseAction = MouseAction.MapDragMovement;
+            }
+            else if (Input.GetMouseButton(1)) {
                 mouseOutOfViewportPosDelta = currentMouseViewportPos - lastMouseOutOfViewportPos;
-                inputData.mouseAction = MouseAction.MapScroll;
+                inputData.mouseAction = MouseAction.MapDragMovement;
                 inputData.pointerPositionDelta = mouseOutOfViewportPosDelta;
                 lastMouseOutOfViewportPos = currentMouseViewportPos;
             }
-            else {
-                inputData.mouseAction = MouseAction.Stopped;
+            else if (Input.GetMouseButtonUp(1)) {
+                ResetMouseActions();
             }
             
             MOEvents.BroadcastOnMouseInput(inputData);
         }
 
         bool IsMouseInViewport() {
-
             return currentMouseViewportPos.x > inputSettings.minViewportValueScrollAction
                    && currentMouseViewportPos.x < inputSettings.maxViewportValueScrollAction
                    && currentMouseViewportPos.y > inputSettings.minViewportValueScrollAction
@@ -94,12 +136,13 @@ namespace Code_MapOfOrders.Logic {
         bool IsMousePresent() {
             return Input.mousePresent;
         }
-        
-        bool CanCollectMovementInput() {
-            return IsMousePresent() || !IsAnyNonScrollButtonPressed();
+
+        bool CanCollectMapScrollMovementInput() {
+            return IsMousePresent() && !IsAnyNonScrollButtonPressed();
         }
 
         bool IsAnyNonScrollButtonPressed() {
+//            Debug.Log($"0: {Input.GetMouseButton(0)} 1: {Input.GetMouseButton(1)}");
             return Input.GetMouseButton(0) || Input.GetMouseButton(1);
         }
     }
