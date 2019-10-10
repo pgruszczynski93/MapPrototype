@@ -6,6 +6,6 @@ namespace Code_MapOfOrders.Logic {
     public struct MOMouseInputData {
         public MouseAction mouseAction;
         public float scrollValue;
-        public Vector2 pointerPositionDelta;
+        public Vector2 pointerPosition;
     }
 }

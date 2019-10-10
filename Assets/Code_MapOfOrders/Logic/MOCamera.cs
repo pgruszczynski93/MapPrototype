@@ -68,10 +68,10 @@ namespace DefaultNamespace {
                 case MouseAction.MapSelection:
                     break;
                 case MouseAction.MapDragMovement:
-                    TryToInvokeDragMapMovement(inputData.pointerPositionDelta);
+                    TryToInvokeDragMapMovement(inputData.pointerPosition);
                     break;
                 case MouseAction.MapScrollMovement:
-                    TryToInvokeScrollMapMovement(inputData.pointerPositionDelta);
+                    TryToInvokeScrollMapMovement(inputData.pointerPosition);
                     break;
                 default:
                     break;
@@ -80,11 +80,12 @@ namespace DefaultNamespace {
             TryToZoomMap(inputData.scrollValue);
         }
 
-        void TryToInvokeDragMapMovement(Vector3 pointerPosDelta) {
-            if (!(pointerPosDelta.sqrMagnitude > 0))
+        void TryToInvokeDragMapMovement(Vector3 pointerPosition) {
+            if (!(pointerPosition.sqrMagnitude > 0))
                 return;
-            
-            
+
+            var draggedPos = new Vector3(-pointerPosition.x, 0, -pointerPosition.y).normalized;
+            thisTransform.localPosition += (Time.deltaTime * cameraSettings.mouseMapDragSpeedScaler*draggedPos);
         }
         
 

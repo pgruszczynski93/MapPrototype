@@ -21,6 +21,10 @@ namespace Code_MapOfOrders.Logic {
         Vector3 lastMouseOutOfViewportPos;
         Vector3 mouseOutOfViewportPosDelta;
 
+        Vector3 mouseDragStartViewportPos;
+        Vector3 mouseDragCurrentViewportPos;
+        Vector3 mouseDragViewportDelta;
+
         void Initialise() {
             if (initialised)
                 return;
@@ -95,7 +99,7 @@ namespace Code_MapOfOrders.Logic {
         void SetScrollMapProperties() {
             mouseOutOfViewportPosDelta = currentMouseViewportPos - lastMouseOutOfViewportPos;
             inputData.mouseAction = MouseAction.MapScrollMovement;
-            inputData.pointerPositionDelta = mouseOutOfViewportPosDelta;
+            inputData.pointerPosition = mouseOutOfViewportPosDelta;
             lastMouseOutOfViewportPos = currentMouseViewportPos;
         }
 
@@ -112,12 +116,15 @@ namespace Code_MapOfOrders.Logic {
 
             if (Input.GetMouseButtonDown(1)) {
                 inputData.mouseAction = MouseAction.MapDragMovement;
+                mouseDragStartViewportPos = mainCamera.ScreenToViewportPoint(mousePosition);
             }
             else if (Input.GetMouseButton(1)) {
-                mouseOutOfViewportPosDelta = currentMouseViewportPos - lastMouseOutOfViewportPos;
+//                mouseOutOfViewportPosDelta = currentMouseViewportPos - lastMouseOutOfViewportPos;
+                mouseDragCurrentViewportPos = mainCamera.ScreenToWorldPoint(mousePosition);
                 inputData.mouseAction = MouseAction.MapDragMovement;
-                inputData.pointerPositionDelta = mouseOutOfViewportPosDelta;
-                lastMouseOutOfViewportPos = currentMouseViewportPos;
+                mouseDragViewportDelta = currentMouseViewportPos - mouseDragStartViewportPos;
+                inputData.pointerPosition = mouseDragViewportDelta;
+//                lastMouseOutOfViewportPos = currentMouseViewportPos;
             }
             else if (Input.GetMouseButtonUp(1)) {
                 ResetMouseActions();
