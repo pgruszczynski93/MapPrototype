@@ -10,7 +10,6 @@ namespace DefaultNamespace {
 
         [SerializeField] Camera thisCamera;
         [SerializeField] Transform thisTransform;
-        public Vector3 testOff;
 
         bool initialised;
 
@@ -20,8 +19,8 @@ namespace DefaultNamespace {
         float minZoom;
         float maxZoom;
 
-
         MOMouseInputData mouseInputData;
+
         Vector3 lastPointerMovementDelta;
 
         void Start() {
@@ -77,10 +76,10 @@ namespace DefaultNamespace {
                 case MouseAction.MapSelection:
                     break;
                 case MouseAction.MapDragMovement:
-                    TryToInvokeDragMapMovement(mouseInputData.pointerPosition);
+                    TryToInvokeDragMapMovement();
                     break;
                 case MouseAction.MapScrollMovement:
-                    TryToInvokeScrollMapMovement(mouseInputData.pointerPosition);
+//                    TryToInvokeScrollMapMovement(mouseInputData.pointerPosition);
                     break;
                 default:
                     break;
@@ -89,10 +88,12 @@ namespace DefaultNamespace {
             TryToZoomMap(mouseInputData.scrollValue);
         }
 
-        void TryToInvokeDragMapMovement(Vector3 pointerPosition) {
-            if (!(pointerPosition.sqrMagnitude > 0))
+        void TryToInvokeDragMapMovement() {
+            if (mouseInputData.mouseAction == MouseAction.Stopped)
                 return;
 
+            
+            var pointerPosition = mouseInputData.pointerPosition;
             var dragPos = new Vector3(pointerPosition.x, 0, pointerPosition.y);
             UpdateCameraPosition(dragPos, cameraSettings.mouseMapDragSpeedMultiplier,
                 cameraSettings.mouseMapDragSensitivity);
@@ -106,16 +107,17 @@ namespace DefaultNamespace {
 //            transform.Translate(move, Space.World);
         }
 
-        void TryToInvokeScrollMapMovement(Vector3 pointerPosDelta) {
-            if (pointerPosDelta.sqrMagnitude > 0)
-                SetLastPointerOutOfViewportTranslation(pointerPosDelta);
+        void TryToInvokeScrollMapMovement() {
+            if (mouseInputData.pointerPosition.sqrMagnitude > 0)
+                SetLastPointerOutOfViewportTranslation();
 
             UpdateCameraPosition(lastPointerMovementDelta, cameraSettings.mouseMapScrollSpeedMultiplier,
                 cameraSettings.mouseMapScrollSpeedSensitivity);
         }
 
-        void SetLastPointerOutOfViewportTranslation(Vector3 pointerPosDelta) {
-            lastPointerMovementDelta = new Vector3(pointerPosDelta.x, 0f, pointerPosDelta.y).normalized;
+        void SetLastPointerOutOfViewportTranslation() {
+            lastPointerMovementDelta =
+                new Vector3(mouseInputData.pointerPosition.x, 0f, mouseInputData.pointerPosition.y).normalized;
         }
 
         void UpdateCameraPosition(Vector3 deltaPosition, float multiplierSpeed, float sensitivity) {

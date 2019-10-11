@@ -1,9 +1,7 @@
 using System;
-using System.Numerics;
 using DefaultNamespace;
 using HGTV.MapsOfOrders;
 using UnityEngine;
-using Vector3 = UnityEngine.Vector3;
 
 namespace Code_MapOfOrders.Logic {
     public class MOMouseInput : MonoBehaviour {
@@ -16,6 +14,7 @@ namespace Code_MapOfOrders.Logic {
 
         bool initialised;
 
+        Vector2 screenDimensions;
         Vector3 mousePosition;
         Vector3 currentMouseViewportPos;
         Vector3 lastMouseOutOfViewportPos;
@@ -29,6 +28,7 @@ namespace Code_MapOfOrders.Logic {
                 return;
 
             initialised = true;
+            screenDimensions = new Vector2(Screen.width, Screen.height);
             LoadAndApplySettings();
         }
 
@@ -70,7 +70,6 @@ namespace Code_MapOfOrders.Logic {
         void UpdateMouseViewportPosition() {
 
             mousePosition = Input.mousePosition;
-            currentMouseViewportPos = mainCamera.ScreenToViewportPoint(mousePosition);
         }
 
         void TryToFetchScrollButtonData() {
@@ -101,7 +100,8 @@ namespace Code_MapOfOrders.Logic {
         }
 
         void InvokeMousePositionDependentAction(Action onMouseInViewport, Action onMouseOutOfViewport) {
-            if (IsMouseInViewport())
+//            if()
+            if (IsMouseInScreenBoundaries())
                 onMouseInViewport?.Invoke();
             else
                 onMouseOutOfViewport?.Invoke();
@@ -109,13 +109,15 @@ namespace Code_MapOfOrders.Logic {
         
         void TryToSetDragMapInput() {
             
-            if (Input.GetMouseButtonDown(0)) {
+            if (Input.GetMouseButtonDown(1)) {
                 mouseDragStartPos = mousePosition;
                 return;
             }
             
-            if (!Input.GetMouseButton(0) || mouseDragStartPos == mousePosition) {
+            if (!Input.GetMouseButton(1) || mouseDragStartPos == mousePosition) {
                 ResetMouseActions();
+                inputData.pointerPosition = VectorZero;
+                MOEvents.BroadcastOnMouseInput(inputData);
                 return;
             }
             
@@ -127,11 +129,11 @@ namespace Code_MapOfOrders.Logic {
             MOEvents.BroadcastOnMouseInput(inputData);
         }
 
-        bool IsMouseInViewport() {
-            return currentMouseViewportPos.x > inputSettings.minViewportValueScrollAction
-                   && currentMouseViewportPos.x < inputSettings.maxViewportValueScrollAction
-                   && currentMouseViewportPos.y > inputSettings.minViewportValueScrollAction
-                   && currentMouseViewportPos.y < inputSettings.maxViewportValueScrollAction;
+        bool IsMouseInScreenBoundaries() {
+            return mousePosition.x >= inputSettings.edgeThickness
+                   && mousePosition.x < screenDimensions.x
+                   && mousePosition.y >= inputSettings.edgeThickness
+                   && mousePosition.y < screenDimensions.y;
         }
 
         bool IsMousePresent() {

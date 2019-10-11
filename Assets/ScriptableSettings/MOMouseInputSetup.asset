@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: MOMouseInputSetup
   m_EditorClassIdentifier: 
   mouseInputSettings:
-    minViewportValueScrollAction: 0.03
-    maxViewportValueScrollAction: 0.97
+    edgeThickness: 2
