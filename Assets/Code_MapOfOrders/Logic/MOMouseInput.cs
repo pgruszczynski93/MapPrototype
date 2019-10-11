@@ -117,10 +117,8 @@ namespace Code_MapOfOrders.Logic {
             }
             
             inputData.mouseAction = MouseAction.MapDragMovement;
-            
             mouseDragDelta = mainCamera.ScreenToViewportPoint(mouseDragStartPos - mousePosition);
             inputData.pointerPosition = mouseDragDelta;
-
             mouseDragStartPos = mousePosition;
             
             MOEvents.BroadcastOnMouseInput(inputData);
@@ -142,7 +140,6 @@ namespace Code_MapOfOrders.Logic {
         }
 
         bool IsAnyNonScrollButtonPressed() {
-//            Debug.Log($"0: {Input.GetMouseButton(0)} 1: {Input.GetMouseButton(1)}");
             return Input.GetMouseButton(0) || Input.GetMouseButton(1);
         }
     }

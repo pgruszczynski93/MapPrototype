@@ -43,26 +43,6 @@ namespace DefaultNamespace {
         void OnDisable() {
             RemoveEvents();
         }
-
-//        void Update()
-//        {
-//            if (Input.GetMouseButtonDown(0))
-//            {
-//                testPos = Input.mousePosition;
-//                return;
-//            }
-// 
-//            if (!Input.GetMouseButton(0) || testPos == Input.mousePosition)
-//                return;
-// 
-//            Vector3 pos = Camera.main.ScreenToViewportPoint( testPos-Input.mousePosition);
-//            Vector3 move = new Vector3(pos.x * 50, 0, pos.y * 50);
-//            
-//            Debug.Log("POS UPDA " + pos);
-// 
-//            transform.Translate(move, Space.World);
-//            testPos = Input.mousePosition;
-//        }
         
         void AssignEvents() {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
@@ -114,9 +94,7 @@ namespace DefaultNamespace {
                 return;
 
             var dragPos = new Vector3(pointerPosition.x, 0, pointerPosition.y);
-            var scaledPositionChangeSpeed = pointerPosition.sqrMagnitude;
-            UpdateCameraPosition(dragPos, cameraSettings.mouseMapDragSpeedMultiplier,
-                scaledPositionChangeSpeed);
+            UpdateCameraPosition(dragPos, cameraSettings.mouseMapDragSpeedMultiplier);
         }
 
 
@@ -139,12 +117,10 @@ namespace DefaultNamespace {
             lastPointerMovementDelta = new Vector3(pointerPosDelta.x, 0f, pointerPosDelta.y).normalized;
         }
 
-        // tweak it:::: 
-        void UpdateCameraPosition(Vector3 deltaPosition, float updateSpeed, float positionChangeSpeed = 1f) {
-//            var desiredPosition = dt * deltaPosition * updateSpeed * positionChangeSpeed;
-//            var desiredPosition = deltaPosition;
-            var newPosition = new Vector3(10*deltaPosition.x , 0f, 10*deltaPosition.z  );
-            thisTransform.Translate(newPosition, Space.World);
+        void UpdateCameraPosition(Vector3 deltaPosition, float updateSpeed) {
+            
+            var desiredPosition = deltaPosition * updateSpeed * dt;
+            thisTransform.Translate(desiredPosition, Space.World);
 //            var smoothedPosition =
 //                Vector3.Slerp(currentPosition, newPosition, dt * updateSpeed);
 //            thisTransform.localPosition = new Vector3(smoothedPosition.x, currentPosition.y, smoothedPosition.z);
