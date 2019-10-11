@@ -14,21 +14,17 @@ namespace Code_MapOfOrders.Logic {
 
         bool initialised;
 
-        Vector2 screenDimensions;
-        Vector3 mousePosition;
-        Vector3 currentMouseViewportPos;
-        Vector3 lastMouseOutOfViewportPos;
-        Vector3 mouseOutOfViewportPosDelta;
+        Vector2 mouseMovementDimensions;
 
-        Vector3 mouseDragStartPos;
-        Vector3 mouseDragDelta;
+        Vector3 mousePosition;
+        Vector3 lastMousePointerPosition;
+        Vector3 mouseMovementDelta;
 
         void Initialise() {
             if (initialised)
                 return;
 
             initialised = true;
-            screenDimensions = new Vector2(Screen.width, Screen.height);
             LoadAndApplySettings();
         }
 
@@ -38,6 +34,9 @@ namespace Code_MapOfOrders.Logic {
 
         void LoadAndApplySettings() {
             inputSettings = inputSetup.mouseInputSettings;
+            mouseMovementDimensions = new Vector2(Screen.width - inputSettings.edgeThickness,
+                Screen.height - inputSettings.edgeThickness);
+
             //todo: more!!
         }
 
@@ -66,9 +65,8 @@ namespace Code_MapOfOrders.Logic {
             TryToFetchScrollButtonData();
             TryToSetDragMapInput();
         }
-        
-        void UpdateMouseViewportPosition() {
 
+        void UpdateMouseViewportPosition() {
             mousePosition = Input.mousePosition;
         }
 
@@ -77,63 +75,70 @@ namespace Code_MapOfOrders.Logic {
         }
 
         void TryToSetScrollMapInputWhenCursorIsOutOfViewport() {
-
             if (!CanCollectMapScrollMovementInput())
                 return;
-            
-            InvokeMousePositionDependentAction(
-                ResetMouseActions,
-                SetScrollMapProperties);
+
+            RecognizeScreenEdgeAction(() => {
+                    ResetMouseActions();
+                    inputData.isOnTheScreenEdge = false;
+                    lastMousePointerPosition = mousePosition;
+                },
+                () => {
+                    inputData.isOnTheScreenEdge = true;
+                    SetScrollMapProperties();
+                });
 
             MOEvents.BroadcastOnMouseInput(inputData);
         }
 
         void ResetMouseActions() {
             inputData.mouseAction = MouseAction.Stopped;
+//            inputData.pointerPosition = VectorZero;
         }
 
         void SetScrollMapProperties() {
-            mouseOutOfViewportPosDelta = currentMouseViewportPos - lastMouseOutOfViewportPos;
+            mouseMovementDelta = mainCamera.ScreenToViewportPoint(mousePosition - lastMousePointerPosition );
+            Debug.Log(mouseMovementDelta);
             inputData.mouseAction = MouseAction.MapScrollMovement;
-            inputData.pointerPosition = mouseOutOfViewportPosDelta;
-            lastMouseOutOfViewportPos = currentMouseViewportPos;
+            inputData.pointerPosition = mouseMovementDelta;
+            lastMousePointerPosition = mousePosition;
         }
 
-        void InvokeMousePositionDependentAction(Action onMouseInViewport, Action onMouseOutOfViewport) {
-//            if()
-            if (IsMouseInScreenBoundaries())
+        void RecognizeScreenEdgeAction(Action onMouseInViewport, Action onMouseOutOfViewport) {
+            if (IsMouseInScreenBoundaries()) {
                 onMouseInViewport?.Invoke();
-            else
+            }
+            else {
                 onMouseOutOfViewport?.Invoke();
+            }
         }
-        
+
         void TryToSetDragMapInput() {
-            
             if (Input.GetMouseButtonDown(1)) {
-                mouseDragStartPos = mousePosition;
+                lastMousePointerPosition = mousePosition;
                 return;
             }
-            
-            if (!Input.GetMouseButton(1) || mouseDragStartPos == mousePosition) {
-                ResetMouseActions();
-                inputData.pointerPosition = VectorZero;
+
+            if (!Input.GetMouseButton(1) || lastMousePointerPosition == mousePosition) {
+                if (!inputData.isOnTheScreenEdge)
+                    ResetMouseActions();
                 MOEvents.BroadcastOnMouseInput(inputData);
                 return;
             }
-            
+
             inputData.mouseAction = MouseAction.MapDragMovement;
-            mouseDragDelta = mainCamera.ScreenToViewportPoint(mouseDragStartPos - mousePosition);
-            inputData.pointerPosition = mouseDragDelta;
-            mouseDragStartPos = mousePosition;
-            
+            mouseMovementDelta = mainCamera.ScreenToViewportPoint(lastMousePointerPosition-mousePosition);
+            inputData.pointerPosition = mouseMovementDelta;
+            lastMousePointerPosition = mousePosition;
+
             MOEvents.BroadcastOnMouseInput(inputData);
         }
 
         bool IsMouseInScreenBoundaries() {
             return mousePosition.x >= inputSettings.edgeThickness
-                   && mousePosition.x < screenDimensions.x
+                   && mousePosition.x <= mouseMovementDimensions.x
                    && mousePosition.y >= inputSettings.edgeThickness
-                   && mousePosition.y < screenDimensions.y;
+                   && mousePosition.y <= mouseMovementDimensions.y;
         }
 
         bool IsMousePresent() {

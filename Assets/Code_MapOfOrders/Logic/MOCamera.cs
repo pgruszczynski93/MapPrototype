@@ -10,7 +10,7 @@ namespace DefaultNamespace {
 
         [SerializeField] Camera thisCamera;
         [SerializeField] Transform thisTransform;
-
+        
         bool initialised;
 
         float dt;
@@ -79,7 +79,7 @@ namespace DefaultNamespace {
                     TryToInvokeDragMapMovement();
                     break;
                 case MouseAction.MapScrollMovement:
-//                    TryToInvokeScrollMapMovement(mouseInputData.pointerPosition);
+                    TryToInvokeScrollMapMovement();
                     break;
                 default:
                     break;
@@ -92,7 +92,6 @@ namespace DefaultNamespace {
             if (mouseInputData.mouseAction == MouseAction.Stopped)
                 return;
 
-            
             var pointerPosition = mouseInputData.pointerPosition;
             var dragPos = new Vector3(pointerPosition.x, 0, pointerPosition.y);
             UpdateCameraPosition(dragPos, cameraSettings.mouseMapDragSpeedMultiplier,
@@ -108,7 +107,7 @@ namespace DefaultNamespace {
         }
 
         void TryToInvokeScrollMapMovement() {
-            if (mouseInputData.pointerPosition.sqrMagnitude > 0)
+            if (mouseInputData.isOnTheScreenEdge)
                 SetLastPointerOutOfViewportTranslation();
 
             UpdateCameraPosition(lastPointerMovementDelta, cameraSettings.mouseMapScrollSpeedMultiplier,
@@ -118,6 +117,7 @@ namespace DefaultNamespace {
         void SetLastPointerOutOfViewportTranslation() {
             lastPointerMovementDelta =
                 new Vector3(mouseInputData.pointerPosition.x, 0f, mouseInputData.pointerPosition.y).normalized;
+            
         }
 
         void UpdateCameraPosition(Vector3 deltaPosition, float multiplierSpeed, float sensitivity) {
