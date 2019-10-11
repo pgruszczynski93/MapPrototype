@@ -21,9 +21,8 @@ namespace Code_MapOfOrders.Logic {
         Vector3 lastMouseOutOfViewportPos;
         Vector3 mouseOutOfViewportPosDelta;
 
-        Vector3 mouseDragStartViewportPos;
-        Vector3 mouseDragCurrentViewportPos;
-        Vector3 mouseDragViewportDelta;
+        Vector3 mouseDragStartPos;
+        Vector3 mouseDragDelta;
 
         void Initialise() {
             if (initialised)
@@ -51,39 +50,34 @@ namespace Code_MapOfOrders.Logic {
         }
 
         void AssignEvents() {
-            MOEvents.OnUpdate += UpdateMouseViewportPosition;
-            MOEvents.OnUpdate += TryToSetScrollMapInputWhenCursorIsOutOfViewport;
-            MOEvents.OnUpdate += TryToFetchScrollButtonData;
-            MOEvents.OnUpdate += TryToSetDragMapInput;
+            MOEvents.OnUpdate += TryToFetchMouseActions;
         }
 
         void RemoveEvents() {
-            MOEvents.OnUpdate -= UpdateMouseViewportPosition;
-            MOEvents.OnUpdate -= TryToSetScrollMapInputWhenCursorIsOutOfViewport;
-            MOEvents.OnUpdate -= TryToFetchScrollButtonData;
-            MOEvents.OnUpdate -= TryToSetDragMapInput;
+            MOEvents.OnUpdate -= TryToFetchMouseActions;
         }
 
-        void TryToFetchScrollButtonData() {
+        void TryToFetchMouseActions() {
             if (!IsMousePresent())
                 return;
 
-            inputData.scrollValue = Input.mouseScrollDelta.y;
+            UpdateMouseViewportPosition();
+            TryToSetScrollMapInputWhenCursorIsOutOfViewport();
+            TryToFetchScrollButtonData();
+            TryToSetDragMapInput();
         }
-
+        
         void UpdateMouseViewportPosition() {
-            //todo: change to REWIRED...
-            if (!IsMousePresent())
-                return;
 
             mousePosition = Input.mousePosition;
             currentMouseViewportPos = mainCamera.ScreenToViewportPoint(mousePosition);
         }
 
+        void TryToFetchScrollButtonData() {
+            inputData.scrollValue = Input.mouseScrollDelta.y;
+        }
 
         void TryToSetScrollMapInputWhenCursorIsOutOfViewport() {
-            if (!CanCollectMapScrollMovementInput())
-                return;
 
             InvokeMousePositionDependentAction(
                 ResetMouseActions,
@@ -109,26 +103,25 @@ namespace Code_MapOfOrders.Logic {
             else
                 onMouseOutOfViewport?.Invoke();
         }
-
+        
         void TryToSetDragMapInput() {
-            if (!IsMousePresent())
+            
+            if (Input.GetMouseButtonDown(0)) {
+                mouseDragStartPos = mousePosition;
                 return;
-
-            if (Input.GetMouseButtonDown(1)) {
-                inputData.mouseAction = MouseAction.MapDragMovement;
-                mouseDragStartViewportPos = mainCamera.ScreenToViewportPoint(mousePosition);
             }
-            else if (Input.GetMouseButton(1)) {
-//                mouseOutOfViewportPosDelta = currentMouseViewportPos - lastMouseOutOfViewportPos;
-                mouseDragCurrentViewportPos = mainCamera.ScreenToWorldPoint(mousePosition);
-                inputData.mouseAction = MouseAction.MapDragMovement;
-                mouseDragViewportDelta = currentMouseViewportPos - mouseDragStartViewportPos;
-                inputData.pointerPosition = mouseDragViewportDelta;
-//                lastMouseOutOfViewportPos = currentMouseViewportPos;
-            }
-            else if (Input.GetMouseButtonUp(1)) {
+            
+            if (!Input.GetMouseButton(0) || mouseDragStartPos == mousePosition) {
                 ResetMouseActions();
+                return;
             }
+            
+            inputData.mouseAction = MouseAction.MapDragMovement;
+            
+            mouseDragDelta = mainCamera.ScreenToViewportPoint(mouseDragStartPos - mousePosition);
+            inputData.pointerPosition = mouseDragDelta;
+
+            mouseDragStartPos = mousePosition;
             
             MOEvents.BroadcastOnMouseInput(inputData);
         }

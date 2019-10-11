@@ -16,5 +16,9 @@ namespace Code_MapOfOrders.Logic {
         void Update() {
             MOEvents.BroadcastOnUpdate();
         }
+
+        void LateUpdate() {
+            MOEvents.BroadcastOnLateUpdate();
+        }
     }
 }
