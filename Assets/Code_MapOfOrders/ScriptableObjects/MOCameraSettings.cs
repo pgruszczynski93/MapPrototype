@@ -8,7 +8,9 @@ namespace HGTV.MapsOfOrders {
         [Range(0, 180)] public float cameraFov;
         [Range(50, 200)] public float zoomSpeed;
         [Range(0.1f, 100f)] public float mouseMapScrollSpeedMultiplier;
-        [Range(0.1f, 2000f)] public float mouseMapDragSpeedMultiplier;
+        [Range(1f, 10)] public float mouseMapScrollSpeedSensitivity;
+        [Range(0.1f, 500f)] public float mouseMapDragSpeedMultiplier;
+        [Range(0.1f, 10f)] public float mouseMapDragSensitivity;
 
         public Vector3 cameraMapSpawnPosition;
         public Vector3 cameraLookAtAngle;

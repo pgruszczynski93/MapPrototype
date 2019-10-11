@@ -79,6 +79,9 @@ namespace Code_MapOfOrders.Logic {
 
         void TryToSetScrollMapInputWhenCursorIsOutOfViewport() {
 
+            if (!CanCollectMapScrollMovementInput())
+                return;
+            
             InvokeMousePositionDependentAction(
                 ResetMouseActions,
                 SetScrollMapProperties);

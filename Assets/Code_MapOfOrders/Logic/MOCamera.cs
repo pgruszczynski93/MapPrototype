@@ -10,6 +10,7 @@ namespace DefaultNamespace {
 
         [SerializeField] Camera thisCamera;
         [SerializeField] Transform thisTransform;
+        public Vector3 testOff;
 
         bool initialised;
 
@@ -19,8 +20,7 @@ namespace DefaultNamespace {
         float minZoom;
         float maxZoom;
 
-        Vector3 testPos;
-        
+
         MOMouseInputData mouseInputData;
         Vector3 lastPointerMovementDelta;
 
@@ -43,7 +43,7 @@ namespace DefaultNamespace {
         void OnDisable() {
             RemoveEvents();
         }
-        
+
         void AssignEvents() {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate += HandleMouseActions;
@@ -80,7 +80,7 @@ namespace DefaultNamespace {
                     TryToInvokeDragMapMovement(mouseInputData.pointerPosition);
                     break;
                 case MouseAction.MapScrollMovement:
-//                    TryToInvokeScrollMapMovement(mouseInputData.pointerPosition);
+                    TryToInvokeScrollMapMovement(mouseInputData.pointerPosition);
                     break;
                 default:
                     break;
@@ -94,7 +94,8 @@ namespace DefaultNamespace {
                 return;
 
             var dragPos = new Vector3(pointerPosition.x, 0, pointerPosition.y);
-            UpdateCameraPosition(dragPos, cameraSettings.mouseMapDragSpeedMultiplier);
+            UpdateCameraPosition(dragPos, cameraSettings.mouseMapDragSpeedMultiplier,
+                cameraSettings.mouseMapDragSensitivity);
         }
 
 
@@ -103,27 +104,28 @@ namespace DefaultNamespace {
 //
 //            Vector3 move = pos.y * scrollData * transform.forward; 
 //            transform.Translate(move, Space.World);
-
         }
 
         void TryToInvokeScrollMapMovement(Vector3 pointerPosDelta) {
             if (pointerPosDelta.sqrMagnitude > 0)
                 SetLastPointerOutOfViewportTranslation(pointerPosDelta);
 
-            UpdateCameraPosition(lastPointerMovementDelta, cameraSettings.mouseMapScrollSpeedMultiplier);
+            UpdateCameraPosition(lastPointerMovementDelta, cameraSettings.mouseMapScrollSpeedMultiplier,
+                cameraSettings.mouseMapScrollSpeedSensitivity);
         }
 
         void SetLastPointerOutOfViewportTranslation(Vector3 pointerPosDelta) {
             lastPointerMovementDelta = new Vector3(pointerPosDelta.x, 0f, pointerPosDelta.y).normalized;
         }
 
-        void UpdateCameraPosition(Vector3 deltaPosition, float updateSpeed) {
-            
-            var desiredPosition = deltaPosition * updateSpeed * dt;
-            thisTransform.Translate(desiredPosition, Space.World);
-//            var smoothedPosition =
-//                Vector3.Slerp(currentPosition, newPosition, dt * updateSpeed);
-//            thisTransform.localPosition = new Vector3(smoothedPosition.x, currentPosition.y, smoothedPosition.z);
+        void UpdateCameraPosition(Vector3 deltaPosition, float multiplierSpeed, float sensitivity) {
+            var currentPos = thisTransform.localPosition;
+            var positionChangeMultiplier = multiplierSpeed * dt * sensitivity;
+            var desiredPosChange = deltaPosition * positionChangeMultiplier;
+            var newPos = currentPos + desiredPosChange;
+            var smoothedPos = Vector3.Slerp(currentPos, newPos, 0.5f);
+            var constantHeightSmoothedPos = new Vector3(smoothedPos.x, currentPos.y, smoothedPos.z);
+            thisTransform.localPosition = constantHeightSmoothedPos;
         }
     }
 }
