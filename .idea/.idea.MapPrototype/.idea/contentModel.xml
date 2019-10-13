@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Unity Projects\Prototypes\MapPrototype" t="IncludeRecursive">
@@ -6,7 +6,8 @@
       <e p="Assets" t="Include">
         <e p="Code_MapOfOrders" t="Include">
           <e p="Logic" t="Include">
-            <e p="MOCamera.cs" t="Include" />
+            <e p="MOCameraMovement.cs" t="Include" />
+            <e p="MOCameraMovementArea.cs" t="Include" />
             <e p="MOConsts.cs" t="Include" />
             <e p="MOEnums.cs" t="Include" />
             <e p="MOEvents.cs" t="Include" />

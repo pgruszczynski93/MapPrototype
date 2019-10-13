@@ -4,19 +4,20 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-    [RequireComponent(typeof(Camera))]
-    public class MOCamera : MonoBehaviour
+    [RequireComponent(typeof(Camera),typeof(MOCameraMovementArea))]
+    public class MOCameraMovement : MonoBehaviour
     {
         [SerializeField] MOCameraSettings cameraSettings;
         [SerializeField] MOCameraSetup cameraSetup;
 
         [SerializeField] Camera thisCamera;
         [SerializeField] Transform thisTransform;
-
+        [SerializeField] MOCameraMovementArea cameraMovementArea;
+        [SerializeField] private MOBorders movementBorders;
+        
         bool initialised;
 
         float dt;
-        float lastPointerMovementMagnitude;
         float currentZoom;
         float minZoom;
         float maxZoom;
@@ -34,6 +35,7 @@ namespace DefaultNamespace
                 return;
 
             initialised = true;
+            movementBorders = cameraMovementArea.MapBorders;
             LoadAndApplySettings();
         }
 
@@ -51,12 +53,23 @@ namespace DefaultNamespace
         {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate += HandleMouseActions;
+            MOEvents.OnLateUpdate += ClampCameraMovement;
         }
 
         void RemoveEvents()
         {
             MOEvents.OnMouseInputCollected -= HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate -= HandleMouseActions;
+            MOEvents.OnLateUpdate -= ClampCameraMovement;
+        }
+
+        void ClampCameraMovement()
+        {
+            var clampedLocalPos = thisTransform.localPosition;
+            clampedLocalPos.x = Mathf.Clamp(clampedLocalPos.x, movementBorders.left, movementBorders.right);
+            clampedLocalPos.y = clampedLocalPos.y;
+            clampedLocalPos.z = Mathf.Clamp(clampedLocalPos.z, movementBorders.bottom, movementBorders.top);
+            thisTransform.localPosition = clampedLocalPos;
         }
 
         void LoadAndApplySettings()
