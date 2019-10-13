@@ -9,15 +9,15 @@ namespace Code_MapOfOrders.Logic
     {
         readonly Vector3 VectorZero = Vector3.zero;
 
-        [SerializeField] MOMouseInputSetup inputSetup;
-        [SerializeField] MOMouseInputSettings inputSettings;
         [SerializeField] Camera mainCamera;
         [SerializeField] MOMouseInputData inputData;
 
         bool initialised;
+        int screenWidth;
+        int screenHeight;
 
         Vector2 mouseMovementDimensions;
-
+        
         Vector3 mousePosition;
         Vector3 lastMousePointerPosition;
         Vector3 mouseMovementDelta;
@@ -28,21 +28,13 @@ namespace Code_MapOfOrders.Logic
                 return;
 
             initialised = true;
-            LoadAndApplySettings();
+            screenWidth = Screen.width;
+            screenHeight = Screen.height;
         }
 
         void Start()
         {
             Initialise();
-        }
-
-        void LoadAndApplySettings()
-        {
-            inputSettings = inputSetup.mouseInputSettings;
-            mouseMovementDimensions = new Vector2(Screen.width - inputSettings.edgeThickness,
-                Screen.height - inputSettings.edgeThickness);
-
-            //todo: more!!
         }
 
         void OnEnable()
@@ -112,7 +104,7 @@ namespace Code_MapOfOrders.Logic
 
         void RecognizeScreenEdgeAction(Action onMouseInViewport, Action onMouseOutOfViewport)
         {
-            if (IsMouseInScreenBoundaries())
+            if (IsMouseInScreenCoords())
                 onMouseInViewport?.Invoke();
             else
                 onMouseOutOfViewport?.Invoke();
@@ -142,12 +134,12 @@ namespace Code_MapOfOrders.Logic
             MOEvents.BroadcastOnMouseInput(inputData);
         }
 
-        bool IsMouseInScreenBoundaries()
+        bool IsMouseInScreenCoords()
         {
-            return mousePosition.x >= inputSettings.edgeThickness
-                   && mousePosition.x <= mouseMovementDimensions.x
-                   && mousePosition.y >= inputSettings.edgeThickness
-                   && mousePosition.y <= mouseMovementDimensions.y;
+            return mousePosition.x > 0
+                   && mousePosition.x < screenWidth
+                   && mousePosition.y > 0
+                   && mousePosition.y < screenHeight;
         }
 
         bool IsMousePresent()
@@ -157,7 +149,7 @@ namespace Code_MapOfOrders.Logic
 
         bool CanCollectMapScrollMovementInput()
         {
-            return !IsAnyNonScrollButtonPressed();
+            return IsMousePresent() && !IsAnyNonScrollButtonPressed();
         }
 
         bool IsAnyNonScrollButtonPressed()

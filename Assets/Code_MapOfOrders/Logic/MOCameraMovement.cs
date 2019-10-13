@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-    [RequireComponent(typeof(Camera),typeof(MOCameraMovementArea))]
+    [RequireComponent(typeof(Camera), typeof(MOCameraMovementArea))]
     public class MOCameraMovement : MonoBehaviour
     {
         [SerializeField] MOCameraSettings cameraSettings;
@@ -14,7 +14,7 @@ namespace DefaultNamespace
         [SerializeField] Transform thisTransform;
         [SerializeField] MOCameraMovementArea cameraMovementArea;
         [SerializeField] private MOBorders movementBorders;
-        
+
         bool initialised;
 
         float dt;
@@ -67,7 +67,7 @@ namespace DefaultNamespace
         {
             var clampedLocalPos = thisTransform.localPosition;
             clampedLocalPos.x = Mathf.Clamp(clampedLocalPos.x, movementBorders.left, movementBorders.right);
-            clampedLocalPos.y = clampedLocalPos.y;
+            clampedLocalPos.y = Mathf.Clamp(clampedLocalPos.y, minZoom, maxZoom);
             clampedLocalPos.z = Mathf.Clamp(clampedLocalPos.z, movementBorders.bottom, movementBorders.top);
             thisTransform.localPosition = clampedLocalPos;
         }
@@ -78,9 +78,10 @@ namespace DefaultNamespace
             thisCamera.fieldOfView = cameraSettings.cameraFov;
             thisTransform.localPosition = cameraSettings.cameraMapSpawnPosition;
             thisTransform.localRotation = Quaternion.Euler(cameraSettings.cameraLookAtAngle);
-            var localPosZ = thisTransform.localPosition.z;
-            minZoom = localPosZ - cameraSettings.zoomValue;
-            maxZoom = localPosZ + cameraSettings.zoomValue;
+            var startHeight = thisTransform.localPosition.y;
+            currentZoom = startHeight;
+            minZoom = startHeight - cameraSettings.zoomValue;
+            maxZoom = startHeight + cameraSettings.zoomValue;
         }
 
         void HandleMouseInputCollectedReceived(MOMouseInputData inputData)
@@ -125,10 +126,14 @@ namespace DefaultNamespace
 
         void TryToZoomMap(float scrollData)
         {
-//            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - mouseOrigin);
-//
-//            Vector3 move = pos.y * scrollData * transform.forward; 
-//            transform.Translate(move, Space.World);
+            currentZoom += scrollData ;
+            if (currentZoom >= minZoom && currentZoom <= maxZoom)
+            {
+                var scrollVector = /*cameraSettings.mouseZoomSensitivity * dt */ scrollData * Vector3.forward;
+                transform.Translate(scrollVector, Space.Self);
+            }
+
+            currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
         }
 
         void TryToInvokeScrollMapMovement()
