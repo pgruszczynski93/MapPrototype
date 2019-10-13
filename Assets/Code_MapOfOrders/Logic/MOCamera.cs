@@ -2,15 +2,17 @@ using Code_MapOfOrders.Logic;
 using HGTV.MapsOfOrders;
 using UnityEngine;
 
-namespace DefaultNamespace {
+namespace DefaultNamespace
+{
     [RequireComponent(typeof(Camera))]
-    public class MOCamera : MonoBehaviour {
+    public class MOCamera : MonoBehaviour
+    {
         [SerializeField] MOCameraSettings cameraSettings;
         [SerializeField] MOCameraSetup cameraSetup;
 
         [SerializeField] Camera thisCamera;
         [SerializeField] Transform thisTransform;
-        
+
         bool initialised;
 
         float dt;
@@ -21,13 +23,13 @@ namespace DefaultNamespace {
 
         MOMouseInputData mouseInputData;
 
-        Vector3 lastPointerMovementDelta;
-
-        void Start() {
+        void Start()
+        {
             Initialise();
         }
 
-        void Initialise() {
+        void Initialise()
+        {
             if (initialised)
                 return;
 
@@ -35,25 +37,30 @@ namespace DefaultNamespace {
             LoadAndApplySettings();
         }
 
-        void OnEnable() {
+        void OnEnable()
+        {
             AssignEvents();
         }
 
-        void OnDisable() {
+        void OnDisable()
+        {
             RemoveEvents();
         }
 
-        void AssignEvents() {
+        void AssignEvents()
+        {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate += HandleMouseActions;
         }
 
-        void RemoveEvents() {
+        void RemoveEvents()
+        {
             MOEvents.OnMouseInputCollected -= HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate -= HandleMouseActions;
         }
 
-        void LoadAndApplySettings() {
+        void LoadAndApplySettings()
+        {
             cameraSettings = cameraSetup.cameraSettings;
             thisCamera.fieldOfView = cameraSettings.cameraFov;
             thisTransform.localPosition = cameraSettings.cameraMapSpawnPosition;
@@ -63,14 +70,17 @@ namespace DefaultNamespace {
             maxZoom = localPosZ + cameraSettings.zoomValue;
         }
 
-        void HandleMouseInputCollectedReceived(MOMouseInputData inputData) {
+        void HandleMouseInputCollectedReceived(MOMouseInputData inputData)
+        {
             mouseInputData = inputData;
         }
 
-        void HandleMouseActions() {
+        void HandleMouseActions()
+        {
             dt = Time.deltaTime;
 
-            switch (mouseInputData.mouseAction) {
+            switch (mouseInputData.mouseAction)
+            {
                 case MouseAction.Stopped:
                     break;
                 case MouseAction.MapSelection:
@@ -88,7 +98,8 @@ namespace DefaultNamespace {
             TryToZoomMap(mouseInputData.scrollValue);
         }
 
-        void TryToInvokeDragMapMovement() {
+        void TryToInvokeDragMapMovement()
+        {
             if (mouseInputData.mouseAction == MouseAction.Stopped)
                 return;
 
@@ -99,28 +110,40 @@ namespace DefaultNamespace {
         }
 
 
-        void TryToZoomMap(float scrollData) {
+        void TryToZoomMap(float scrollData)
+        {
 //            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - mouseOrigin);
 //
 //            Vector3 move = pos.y * scrollData * transform.forward; 
 //            transform.Translate(move, Space.World);
         }
 
-        void TryToInvokeScrollMapMovement() {
-            if (mouseInputData.isOnTheScreenEdge)
-                SetLastPointerOutOfViewportTranslation();
+        void TryToInvokeScrollMapMovement()
+        {
+            if (mouseInputData.mouseAction != MouseAction.MapScrollMovement)
+                return;
 
-            UpdateCameraPosition(lastPointerMovementDelta, cameraSettings.mouseMapScrollSpeedMultiplier,
-                cameraSettings.mouseMapScrollSpeedSensitivity);
+            var mapScrollDirection = PointerEdgePositionToScrollDirection();
+            PointerEdgePositionToScrollDirection();
+            UpdateCameraPosition(mapScrollDirection, cameraSettings.mouseMapScrollSpeedMultiplier,
+                cameraSettings.mouseMapDragSensitivity);
         }
 
-        void SetLastPointerOutOfViewportTranslation() {
-            lastPointerMovementDelta =
-                new Vector3(mouseInputData.pointerPosition.x, 0f, mouseInputData.pointerPosition.y).normalized;
-            
+        Vector3 PointerEdgePositionToScrollDirection()
+        {
+            var pointerPosition = mouseInputData.pointerPosition;
+            var scrollDirectionX = RescaleViewportMinMaxCoordinate(pointerPosition.x, -1, 1f);
+            var scrollDirectionZ = RescaleViewportMinMaxCoordinate(pointerPosition.y, -1, 1f);
+            return new Vector3(scrollDirectionX, 0, scrollDirectionZ).normalized;
         }
 
-        void UpdateCameraPosition(Vector3 deltaPosition, float multiplierSpeed, float sensitivity) {
+        float RescaleViewportMinMaxCoordinate(float oldVal, float newMin, float newMax)
+        {
+            return (oldVal) * (newMax - newMin) + newMin;
+        }
+
+        void UpdateCameraPosition(Vector3 deltaPosition, float multiplierSpeed, float sensitivity)
+        {
             var currentPos = thisTransform.localPosition;
             var positionChangeMultiplier = multiplierSpeed * dt * sensitivity;
             var desiredPosChange = deltaPosition * positionChangeMultiplier;

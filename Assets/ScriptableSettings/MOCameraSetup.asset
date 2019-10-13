@@ -18,7 +18,7 @@ MonoBehaviour:
     zoomSpeed: 60
     mouseMapScrollSpeedMultiplier: 10
     mouseMapScrollSpeedSensitivity: 5
-    mouseMapDragSpeedMultiplier: 300
-    mouseMapDragSensitivity: 8
+    mouseMapDragSpeedMultiplier: 450
+    mouseMapDragSensitivity: 10
     cameraMapSpawnPosition: {x: 10, y: 20, z: 0}
     cameraLookAtAngle: {x: 55, y: 355, z: 0}
