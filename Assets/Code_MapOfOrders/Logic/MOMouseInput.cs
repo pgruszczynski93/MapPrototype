@@ -9,14 +9,14 @@ namespace Code_MapOfOrders.Logic
     {
         readonly Vector3 VectorZero = Vector3.zero;
 
+        [Range(1, 10), SerializeField] float screenBorder;
         [SerializeField] Camera mainCamera;
         [SerializeField] MOMouseInputData inputData;
 
         bool initialised;
-        int screenWidth;
-        int screenHeight;
 
         Vector2 mouseMovementDimensions;
+        Vector2 mouseMovementBorders;
         
         Vector3 mousePosition;
         Vector3 lastMousePointerPosition;
@@ -28,8 +28,7 @@ namespace Code_MapOfOrders.Logic
                 return;
 
             initialised = true;
-            screenWidth = Screen.width;
-            screenHeight = Screen.height;
+            mouseMovementBorders = new Vector3(Screen.width - screenBorder, Screen.height - screenBorder);
         }
 
         void Start()
@@ -75,7 +74,7 @@ namespace Code_MapOfOrders.Logic
 
         void TryToFetchScrollButtonData()
         {
-            inputData.scrollValue = Input.mouseScrollDelta.y;
+            inputData.scrollValue = (int)Input.mouseScrollDelta.y;
         }
 
         void TryToSetScrollMapInputWhenCursorIsOutOfViewport()
@@ -137,9 +136,9 @@ namespace Code_MapOfOrders.Logic
         bool IsMouseInScreenCoords()
         {
             return mousePosition.x > 0
-                   && mousePosition.x < screenWidth
+                   && mousePosition.x < mouseMovementBorders.x
                    && mousePosition.y > 0
-                   && mousePosition.y < screenHeight;
+                   && mousePosition.y < mouseMovementBorders.y;
         }
 
         bool IsMousePresent()

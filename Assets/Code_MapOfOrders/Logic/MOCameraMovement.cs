@@ -124,12 +124,12 @@ namespace DefaultNamespace
         }
 
 
-        void TryToZoomMap(float scrollData)
+        void TryToZoomMap(int scrollData)
         {
-            currentZoom += scrollData ;
-            if (currentZoom >= minZoom && currentZoom <= maxZoom)
+            currentZoom += scrollData;
+            if (currentZoom >= minZoom && currentZoom <= maxZoom && scrollData != 0)
             {
-                var scrollVector = /*cameraSettings.mouseZoomSensitivity * dt */ scrollData * Vector3.forward;
+                var scrollVector = /*cameraSettings.mouseZoomSensitivity * dt */scrollData * Vector3.forward;
                 transform.Translate(scrollVector, Space.Self);
             }
 
@@ -152,6 +152,7 @@ namespace DefaultNamespace
             var pointerPosition = mouseInputData.pointerPosition;
             var scrollDirectionX = RescaleViewportMinMaxCoordinate(pointerPosition.x, -1, 1f);
             var scrollDirectionZ = RescaleViewportMinMaxCoordinate(pointerPosition.y, -1, 1f);
+            Debug.Log(new Vector3(scrollDirectionX, 0, scrollDirectionZ).normalized);
             return new Vector3(scrollDirectionX, 0, scrollDirectionZ).normalized;
         }
 
