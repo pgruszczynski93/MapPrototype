@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: MOCameraSetup
   m_EditorClassIdentifier: 
   cameraSettings:
-    maxZoomValue: 12
+    maxZoomValue: 15
     cameraFov: 60
-    zoomDistanceStep: 170
+    zoomDistanceStep: 5
     smoothZoomTime: 0.15
     cameraMoveSmoothing: 0.4
     mouseMapScrollSpeedMultiplier: 13

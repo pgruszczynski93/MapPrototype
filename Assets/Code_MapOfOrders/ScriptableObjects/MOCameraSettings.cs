@@ -5,7 +5,7 @@ namespace HGTV.MapsOfOrders {
     public struct MOCameraSettings {
         [Range(0, 25)] public float maxZoomValue;
         [Range(0, 180)] public float cameraFov;
-        [Range(1, 1000)] public float zoomDistanceStep;
+        [Range(0, 10)] public float zoomDistanceStep;
         [Range(0f, 1f)] public float smoothZoomTime;
         [Range(0f, 1f)] public float cameraMoveSmoothing;
         [Range(0.1f, 100f)] public float mouseMapScrollSpeedMultiplier;
