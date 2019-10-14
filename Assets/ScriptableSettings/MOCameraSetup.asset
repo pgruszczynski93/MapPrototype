@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: MOCameraSetup
   m_EditorClassIdentifier: 
   cameraSettings:
-    zoomValue: 10
+    maxZoomValue: 12
     cameraFov: 60
-    zoomSpeed: 60
-    mouseMapScrollSpeedMultiplier: 10
-    mouseMapScrollSpeedSensitivity: 5
+    zoomDistanceStep: 170
+    smoothZoomTime: 0.15
+    cameraMoveSmoothing: 0.4
+    mouseMapScrollSpeedMultiplier: 13
     mouseMapDragSpeedMultiplier: 450
     mouseMapDragSensitivity: 10
-    mouseZoomSensitivity: 100
     cameraMapSpawnPosition: {x: 10, y: 20, z: 0}
     cameraLookAtAngle: {x: 55, y: 355, z: 0}
