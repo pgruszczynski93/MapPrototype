@@ -14,19 +14,21 @@ namespace DefaultNamespace
     {
         [SerializeField] MOCameraSettings cameraSettings;
         [SerializeField] MOCameraSetup cameraSetup;
-
+        
         [SerializeField] Camera thisCamera;
         [SerializeField] Transform thisTransform;
         [SerializeField] MOCameraMovementArea cameraMovementArea;
+        [SerializeField] MOHouseSelector houseSelector;
         [SerializeField] MOBorders movementBorders;
 
         bool isZooming;
+        bool isSelected;
         bool initialised;
 
         float dt;
         float minZoom;
         float maxZoom;
-        [SerializeField] float currentZoom;
+        float currentZoom;
 
         MOMouseInputData mouseInputData;
 
@@ -58,15 +60,13 @@ namespace DefaultNamespace
         void AssignEvents()
         {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
-            MOEvents.OnLateUpdate += HandleMouseActions;
-//            MOEvents.OnLateUpdate += ClampCameraMovement;
+            MOEvents.OnLateUpdate += HandleMouseMovementActions;
         }
 
         void RemoveEvents()
         {
             MOEvents.OnMouseInputCollected -= HandleMouseInputCollectedReceived;
-            MOEvents.OnLateUpdate -= HandleMouseActions;
-//            MOEvents.OnLateUpdate -= ClampCameraMovement;
+            MOEvents.OnLateUpdate -= HandleMouseMovementActions;
         }
 
         void ClampCameraMovement()
@@ -95,15 +95,17 @@ namespace DefaultNamespace
             mouseInputData = inputData;
         }
 
-        void HandleMouseActions()
+        void HandleMouseMovementActions()
         {
             dt = Time.deltaTime;
 
             switch (mouseInputData.mouseAction)
             {
-                case MouseAction.Stopped:
+                case MouseAction.Undefined:
+                    ResetSelectingPossibility();
                     break;
                 case MouseAction.MapSelection:
+                    TryToSelect();
                     break;
                 case MouseAction.MapDragMovement:
                     TryToInvokeDragMapMovement();
@@ -123,12 +125,27 @@ namespace DefaultNamespace
             ClampCameraMovement();
         }
 
+        void ResetSelectingPossibility() {
+            isSelected = false;
+            
+            houseSelector.TryToHighlightObject(thisCamera.ScreenPointToRay(mouseInputData.pointerPosition));
+        }
+        
+        void TryToSelect() {
+            if (isSelected) 
+                return;
+            Debug.Log("[MOCameraMovement] Select");
+            isSelected = true;
+            houseSelector.Show(thisCamera.ScreenPointToRay(mouseInputData.pointerActionPosition));
+        }
+
         void TryToInvokeDragMapMovement()
         {
-            if (mouseInputData.mouseAction == MouseAction.Stopped)
+            if (mouseInputData.mouseAction != MouseAction.MapDragMovement)
                 return;
 
-            var pointerPosition = mouseInputData.pointerPosition;
+            Debug.Log("[MOCameraMovement] Drag");
+            var pointerPosition = mouseInputData.pointerActionPosition;
             var dragPos = new Vector3(pointerPosition.x, 0, pointerPosition.y);
             UpdateCameraPosition(dragPos, cameraSettings.mouseMapDragSpeedMultiplier,
                 cameraSettings.mouseMapDragSensitivity);
@@ -141,7 +158,8 @@ namespace DefaultNamespace
             if (scrollValue == 0 || isZooming)
                 return;
 
-            var zoomDelta = cameraSettings.zoomDistanceStep * scrollValue;
+            Debug.Log("[MOCameraMovement] Zoom");
+            var zoomDelta = cameraSettings.zoomDistanceStep * Mathf.Sign(scrollValue);
             var currentPos = thisTransform.localPosition;
             var nextZoom = currentZoom - zoomDelta;
             currentZoom = nextZoom;
@@ -173,6 +191,7 @@ namespace DefaultNamespace
             if (mouseInputData.mouseAction != MouseAction.MapScrollMovement)
                 return;
 
+            Debug.Log("[MOCameraMovement] Scroll map");
             var mapScrollDirection = PointerEdgePositionToScrollDirection();
             PointerEdgePositionToScrollDirection();
             UpdateCameraPosition(mapScrollDirection, cameraSettings.mouseMapScrollSpeedMultiplier,
@@ -181,7 +200,7 @@ namespace DefaultNamespace
 
         Vector3 PointerEdgePositionToScrollDirection()
         {
-            var pointerPosition = mouseInputData.pointerPosition;
+            var pointerPosition = mouseInputData.pointerActionPosition;
             var scrollDirectionX = RescaleViewportMinMaxCoordinate(pointerPosition.x, -1, 1f);
             var scrollDirectionZ = RescaleViewportMinMaxCoordinate(pointerPosition.y, -1, 1f);
             return new Vector3(scrollDirectionX, 0, scrollDirectionZ).normalized;

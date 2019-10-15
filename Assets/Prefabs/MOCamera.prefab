@@ -97,14 +97,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraSettings:
-    zoomValue: 0
+    maxZoomValue: 0
     cameraFov: 0
-    zoomSpeed: 0
+    zoomDistanceStep: 0
+    smoothZoomTime: 0
+    cameraMoveSmoothing: 0
     mouseMapScrollSpeedMultiplier: 0
-    mouseMapScrollSpeedSensitivity: 0
     mouseMapDragSpeedMultiplier: 0
     mouseMapDragSensitivity: 0
-    mouseZoomSensitivity: 0
     cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
     cameraLookAtAngle: {x: 0, y: 0, z: 0}
   cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}

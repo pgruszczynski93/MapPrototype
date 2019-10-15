@@ -7,5 +7,6 @@ namespace Code_MapOfOrders.Logic {
         public MouseAction mouseAction;
         public int scrollValue;
         public Vector2 pointerPosition;
+        public Vector2 pointerActionPosition;
     }
 }

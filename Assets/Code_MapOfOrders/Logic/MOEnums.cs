@@ -1,8 +1,14 @@
 namespace HGTV.MapsOfOrders {
     public enum MouseAction {
-        Stopped,
+        Undefined,
         MapSelection,
         MapDragMovement, 
         MapScrollMovement
+    }
+
+    public enum HouseAction {
+        Undefined,
+        Highlighted,
+        Selected
     }
 }
