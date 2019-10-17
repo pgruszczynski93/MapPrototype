@@ -26,7 +26,7 @@ namespace DefaultNamespace {
 
         float minZoom;
         float maxZoom;
-        float currentZoom;
+        [SerializeField] float currentZoom;
 
         MOMouseInputData mouseInputData;
 
@@ -140,17 +140,31 @@ namespace DefaultNamespace {
                 return;
 
             Debug.Log("[MOCameraMovement] Zoom");
-            var zoomDelta = cameraSettings.zoomDistanceStep * Mathf.Sign(scrollValue);
+            var zoomSign = Mathf.Sign(scrollValue);
+            var zoomDelta = cameraSetup.cameraSettings.zoomTweenProperties.positionDeltaMultiplier * zoomSign;
             var currentPos = thisTransform.localPosition;
             var nextZoom = currentZoom - zoomDelta;
-            currentZoom = nextZoom;
-            if (nextZoom >= minZoom && nextZoom <= maxZoom) {
-                var scrollVec = currentPos + zoomDelta * thisTransform.forward;
-                thisTransform.DOMove(scrollVec, cameraSetup.cameraSettings.zoomTweenProperties.tweenTime)
-                    .SetEase(cameraSetup.cameraSettings.zoomTweenProperties.easeType);
+
+            var positionAfterScroll = currentPos + zoomDelta * thisTransform.forward;
+            var afterScrollY = Mathf.Clamp(positionAfterScroll.y, minZoom, maxZoom);
+            var clampedPositionAfterScroll = new Vector3(positionAfterScroll.x, afterScrollY, positionAfterScroll.z);
+
+            // poprawić to
+            Debug.Log("B scroll " + positionAfterScroll.y);
+            if ((positionAfterScroll.y <= minZoom && zoomSign > 0) ||
+                (positionAfterScroll.y >= maxZoom && zoomSign < 0)) {
+                thisTransform
+                    .DOMove(clampedPositionAfterScroll, cameraSetup.cameraSettings.zoomTweenProperties.tweenTime)
+                    .SetEase(cameraSetup.cameraSettings.zoomTweenProperties.easeType)
+                    .OnComplete(() => currentZoom = Mathf.Clamp(nextZoom, minZoom, maxZoom));
+            }
+            else {
+                thisTransform
+                    .DOMove(clampedPositionAfterScroll, cameraSetup.cameraSettings.zoomTweenProperties.tweenTime)
+                    .SetEase(cameraSetup.cameraSettings.zoomTweenProperties.easeType)
+                    .OnComplete(() => currentZoom = Mathf.Clamp(nextZoom, minZoom, maxZoom));
             }
 
-            currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
         }
 
         void TryToInvokeScrollMapMovement() {
