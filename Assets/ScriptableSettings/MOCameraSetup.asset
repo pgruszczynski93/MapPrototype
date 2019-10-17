@@ -15,18 +15,17 @@ MonoBehaviour:
   cameraSettings:
     maxZoomValue: 15
     cameraFov: 60
-    zoomDistanceStep: 5
     dragTweenProperties:
       easeType: 6
       tweenTime: 0.3
       positionDeltaMultiplier: 200
-    zoomTweenProperties:
-      easeType: 0
-      tweenTime: 0
-      positionDeltaMultiplier: 0
     scrollTweenProperties:
       easeType: 3
       tweenTime: 0.6
       positionDeltaMultiplier: 10
+    zoomTweenProperties:
+      easeType: 21
+      tweenTime: 0.3
+      positionDeltaMultiplier: 5
     cameraMapSpawnPosition: {x: 10, y: 20, z: 0}
     cameraLookAtAngle: {x: 55, y: 355, z: 0}
