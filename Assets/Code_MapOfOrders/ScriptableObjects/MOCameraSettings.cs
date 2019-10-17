@@ -9,17 +9,20 @@ namespace HGTV.MapsOfOrders {
         [Range(0, 10)] public float zoomDistanceStep;
 
         public TweenProperty dragTweenProperties;
-        public TweenProperty zoomTweenProperties;
         public TweenProperty scrollTweenProperties;
+        public TweenProperty zoomTweenProperties;
 
         public Vector3 cameraMapSpawnPosition;
         public Vector3 cameraLookAtAngle;
     }
-    
+
     [System.Serializable]
     public struct TweenProperty {
         public Ease easeType;
         [Range(0f, 10f)] public float tweenTime;
-        [Range(0f, 500f)] public float positionDeltaMultiplier;
+
+        [Tooltip("Set this for scroll & drag properties. For zooming is ignored."),
+         Range(0f, 500f)]
+        public float positionDeltaMultiplier;
     }
 }

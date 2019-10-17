@@ -26,7 +26,7 @@ MonoBehaviour:
       positionDeltaMultiplier: 0
     scrollTweenProperties:
       easeType: 3
-      tweenTime: 0.5
+      tweenTime: 0.6
       positionDeltaMultiplier: 10
     cameraMapSpawnPosition: {x: 10, y: 20, z: 0}
     cameraLookAtAngle: {x: 55, y: 355, z: 0}

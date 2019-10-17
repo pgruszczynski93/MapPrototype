@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4233181020137376669}
   - component: {fileID: 3087744889426965066}
   - component: {fileID: 877348938}
+  - component: {fileID: 4233181019628937684}
   m_Layer: 0
   m_Name: MOCamera
   m_TagString: MainCamera
@@ -100,17 +101,25 @@ MonoBehaviour:
     maxZoomValue: 0
     cameraFov: 0
     zoomDistanceStep: 0
-    smoothZoomTime: 0
-    cameraMoveSmoothing: 0
-    mouseMapScrollSpeedMultiplier: 0
-    mouseMapDragSpeedMultiplier: 0
-    mouseMapDragSensitivity: 0
+    dragTweenProperties:
+      easeType: 0
+      tweenTime: 0
+      positionDeltaMultiplier: 0
+    scrollTweenProperties:
+      easeType: 0
+      tweenTime: 0
+      positionDeltaMultiplier: 0
+    zoomTweenProperties:
+      easeType: 0
+      tweenTime: 0
+      positionDeltaMultiplier: 0
     cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
     cameraLookAtAngle: {x: 0, y: 0, z: 0}
   cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
   thisCamera: {fileID: 4233181020137376642}
   thisTransform: {fileID: 4233181020137376643}
   cameraMovementArea: {fileID: 877348938}
+  houseSelector: {fileID: 4233181019628937684}
   movementBorders:
     top: 0
     bottom: 0
@@ -132,3 +141,15 @@ MonoBehaviour:
   rightBorder: {fileID: 0}
   topBorder: {fileID: 0}
   bottomBorder: {fileID: 0}
+--- !u!114 &4233181019628937684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4233181020137376668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d72cbd987784966bd97d511480dd8a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

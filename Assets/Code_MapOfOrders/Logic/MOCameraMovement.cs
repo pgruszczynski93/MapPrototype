@@ -24,7 +24,6 @@ namespace DefaultNamespace {
         bool isSelected;
         bool initialised;
 
-        float dt;
         float minZoom;
         float maxZoom;
         float currentZoom;
@@ -86,8 +85,6 @@ namespace DefaultNamespace {
         }
 
         void HandleMouseMovementActions() {
-            dt = Time.deltaTime;
-
             switch (mouseInputData.mouseAction) {
                 case MouseAction.Undefined:
                     //ResetSelectingPossibility();
@@ -99,14 +96,14 @@ namespace DefaultNamespace {
                     TryToInvokeDragMapMovement();
                     break;
                 case MouseAction.MapScrollMovement:
-                   TryToInvokeScrollMapMovement();
+//                   TryToInvokeScrollMapMovement();
                     break;
                 default:
                     break;
             }
 
             if (isZooming == false) {
-//                TryToZoomMap();
+                TryToZoomMap();
             }
 
             ClampCameraMovement();
@@ -137,52 +134,33 @@ namespace DefaultNamespace {
         }
 
 
-//        void TryToZoomMap()
-//        {
-//            var scrollValue = mouseInputData.scrollValue;
-//            if (scrollValue == 0 || isZooming)
-//                return;
-//
-//            Debug.Log("[MOCameraMovement] Zoom");
-//            var zoomDelta = cameraSettings.zoomDistanceStep * Mathf.Sign(scrollValue);
-//            var currentPos = thisTransform.localPosition;
-//            var nextZoom = currentZoom - zoomDelta;
-//            currentZoom = nextZoom;
-//            if (nextZoom >= minZoom && nextZoom <= maxZoom)
-//            {
-//                var scrollVec = currentPos + zoomDelta * thisTransform.forward;
-//                StartCoroutine(SmoothZoom(currentPos, scrollVec));
-//            }
-//            currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
-//        }
-//
-////todo: change it to smooth util (hf) and ease in out animation
-//        IEnumerator SmoothZoom(Vector3 from, Vector3 to, Action onEnd = null)
-//        {
-//            var t = 0f;
-//            isZooming = true;
-//            while (t < cameraSettings.smoothZoomTime)
-//            {
-//                t += dt;
-//                transform.position = Vector3.Lerp(from, to, t / cameraSettings.smoothZoomTime);
-//                yield return null;
-//            }
-//
-//            isZooming = false;
-//        }
-        /// /////////////////////////////////
+        void TryToZoomMap() {
+            var scrollValue = mouseInputData.scrollValue;
+            if (scrollValue == 0 || isZooming)
+                return;
+
+            Debug.Log("[MOCameraMovement] Zoom");
+            var zoomDelta = cameraSettings.zoomDistanceStep * Mathf.Sign(scrollValue);
+            var currentPos = thisTransform.localPosition;
+            var nextZoom = currentZoom - zoomDelta;
+            currentZoom = nextZoom;
+            if (nextZoom >= minZoom && nextZoom <= maxZoom) {
+                var scrollVec = currentPos + zoomDelta * thisTransform.forward;
+                thisTransform.DOMove(scrollVec, cameraSetup.cameraSettings.zoomTweenProperties.tweenTime)
+                    .SetEase(cameraSetup.cameraSettings.zoomTweenProperties.easeType);
+            }
+
+            currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
+        }
+
         void TryToInvokeScrollMapMovement() {
-            switch (mouseInputData.mouseAction) {
-                case MouseAction.MapScrollMovement: {
-                    Debug.Log("[MOCameraMovement] Scroll map");
-                    var mapScrollDirection = PointerEdgePositionToScrollDirection();
-                    PointerEdgePositionToScrollDirection();
-                    UpdateCameraPosition(mapScrollDirection, cameraSetup.cameraSettings.scrollTweenProperties);
-                    break;
-                }
-                case MouseAction.Undefined:
-                    thisTransform.DOPause();
-                    break;
+            if (mouseInputData.mouseAction != MouseAction.MapScrollMovement)
+                thisTransform.DOPause();
+            else {
+                Debug.Log("[MOCameraMovement] Scroll map");
+                var mapScrollDirection = PointerEdgePositionToScrollDirection();
+                PointerEdgePositionToScrollDirection();
+                UpdateCameraPosition(mapScrollDirection, cameraSetup.cameraSettings.scrollTweenProperties);
             }
         }
 
