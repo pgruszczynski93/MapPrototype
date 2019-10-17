@@ -131,9 +131,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: e888f904b00611f4dab471a0fb55ebe1, type: 2}
-  highlightMat: {fileID: 0}
-  selectionMat: {fileID: 0}
-  normalMaterial: {fileID: 0}
+  highlightMat: {fileID: 2100000, guid: 2c2db1dbea584294f86bba6ae3af9319, type: 2}
+  selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
+  normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
+  renderer: {fileID: 81572280}
 --- !u!65 &81572278
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -147,6 +148,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 1.9999986, z: 2}
   m_Center: {x: 44.46663, y: 1.0000007, z: 17.96012}
+--- !u!23 &81572280 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2300058, guid: 1feb4ec16094de140a20c2506e5a5717,
+    type: 3}
+  m_PrefabInstance: {fileID: 1404121621}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,9 +242,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: 0fa7604c6be11e24697725f582a79bf7, type: 2}
-  highlightMat: {fileID: 0}
-  selectionMat: {fileID: 0}
-  normalMaterial: {fileID: 0}
+  highlightMat: {fileID: 2100000, guid: 2c2db1dbea584294f86bba6ae3af9319, type: 2}
+  selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
+  normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
+  renderer: {fileID: 287569091}
 --- !u!65 &287569089
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -251,6 +259,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.9999981, y: 0.9999993, z: 2}
   m_Center: {x: 32.71663, y: 0.50000036, z: 17.71012}
+--- !u!23 &287569091 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2300048, guid: 1feb4ec16094de140a20c2506e5a5717,
+    type: 3}
+  m_PrefabInstance: {fileID: 1404121621}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &532760572
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,9 +559,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: c4ce295dae2ee924e84f794fdd735b76, type: 2}
-  highlightMat: {fileID: 0}
-  selectionMat: {fileID: 0}
-  normalMaterial: {fileID: 0}
+  highlightMat: {fileID: 2100000, guid: 2c2db1dbea584294f86bba6ae3af9319, type: 2}
+  selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
+  normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
+  renderer: {fileID: 1095247973}
 --- !u!65 &1095247971
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -561,6 +576,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.0000095, y: 1.9999986, z: 2.0000029}
   m_Center: {x: 20.966637, y: 1.0000007, z: 9.460119}
+--- !u!23 &1095247973 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2300006, guid: 1feb4ec16094de140a20c2506e5a5717,
+    type: 3}
+  m_PrefabInstance: {fileID: 1404121621}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1343740330
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,9 +645,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: aa91928a75606244bbc2aabac8da93a6, type: 2}
-  highlightMat: {fileID: 0}
-  selectionMat: {fileID: 0}
-  normalMaterial: {fileID: 0}
+  highlightMat: {fileID: 2100000, guid: 2c2db1dbea584294f86bba6ae3af9319, type: 2}
+  selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
+  normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
+  renderer: {fileID: 1384684460}
 --- !u!65 &1384684458
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -640,6 +662,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 1.9999986, z: 2}
   m_Center: {x: 64.71663, y: 1.0000007, z: 29.96012}
+--- !u!23 &1384684460 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2300082, guid: 1feb4ec16094de140a20c2506e5a5717,
+    type: 3}
+  m_PrefabInstance: {fileID: 1404121621}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1404121621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -796,9 +824,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: fa32d5b9d6346c248862cda52d50b5f8, type: 2}
-  highlightMat: {fileID: 0}
-  selectionMat: {fileID: 0}
-  normalMaterial: {fileID: 0}
+  highlightMat: {fileID: 2100000, guid: 2c2db1dbea584294f86bba6ae3af9319, type: 2}
+  selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
+  normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
+  renderer: {fileID: 1742031467}
 --- !u!65 &1742031465
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -812,6 +841,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.9999981, y: 0.9999993, z: 2}
   m_Center: {x: 32.71663, y: 0.50000036, z: 29.96012}
+--- !u!23 &1742031467 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2300042, guid: 1feb4ec16094de140a20c2506e5a5717,
+    type: 3}
+  m_PrefabInstance: {fileID: 1404121621}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1787331219 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 4233181020137376642, guid: f5845ac81edba8347a42bae6a0d70706,

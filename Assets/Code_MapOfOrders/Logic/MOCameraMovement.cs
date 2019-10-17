@@ -2,19 +2,18 @@ using System;
 using System.Collections;
 using System.Numerics;
 using Code_MapOfOrders.Logic;
+using DG.Tweening;
 using HGTV.MapsOfOrders;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
-namespace DefaultNamespace
-{
+namespace DefaultNamespace {
     [RequireComponent(typeof(Camera), typeof(MOCameraMovementArea))]
-    public class MOCameraMovement : MonoBehaviour
-    {
+    public class MOCameraMovement : MonoBehaviour {
         [SerializeField] MOCameraSettings cameraSettings;
         [SerializeField] MOCameraSetup cameraSetup;
-        
+
         [SerializeField] Camera thisCamera;
         [SerializeField] Transform thisTransform;
         [SerializeField] MOCameraMovementArea cameraMovementArea;
@@ -32,13 +31,11 @@ namespace DefaultNamespace
 
         MOMouseInputData mouseInputData;
 
-        void Start()
-        {
+        void Start() {
             Initialise();
         }
 
-        void Initialise()
-        {
+        void Initialise() {
             if (initialised)
                 return;
 
@@ -47,30 +44,25 @@ namespace DefaultNamespace
             LoadAndApplySettings();
         }
 
-        void OnEnable()
-        {
+        void OnEnable() {
             AssignEvents();
         }
 
-        void OnDisable()
-        {
+        void OnDisable() {
             RemoveEvents();
         }
 
-        void AssignEvents()
-        {
+        void AssignEvents() {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate += HandleMouseMovementActions;
         }
 
-        void RemoveEvents()
-        {
+        void RemoveEvents() {
             MOEvents.OnMouseInputCollected -= HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate -= HandleMouseMovementActions;
         }
 
-        void ClampCameraMovement()
-        {
+        void ClampCameraMovement() {
             var clampedLocalPos = thisTransform.localPosition;
             clampedLocalPos.x = Mathf.Clamp(clampedLocalPos.x, movementBorders.left, movementBorders.right);
             clampedLocalPos.y = Mathf.Clamp(clampedLocalPos.y, minZoom, maxZoom);
@@ -78,8 +70,7 @@ namespace DefaultNamespace
             thisTransform.localPosition = clampedLocalPos;
         }
 
-        void LoadAndApplySettings()
-        {
+        void LoadAndApplySettings() {
             cameraSettings = cameraSetup.cameraSettings;
             thisCamera.fieldOfView = cameraSettings.cameraFov;
             thisTransform.localPosition = cameraSettings.cameraMapSpawnPosition;
@@ -90,36 +81,32 @@ namespace DefaultNamespace
             maxZoom = startHeight + cameraSettings.maxZoomValue;
         }
 
-        void HandleMouseInputCollectedReceived(MOMouseInputData inputData)
-        {
+        void HandleMouseInputCollectedReceived(MOMouseInputData inputData) {
             mouseInputData = inputData;
         }
 
-        void HandleMouseMovementActions()
-        {
+        void HandleMouseMovementActions() {
             dt = Time.deltaTime;
 
-            switch (mouseInputData.mouseAction)
-            {
+            switch (mouseInputData.mouseAction) {
                 case MouseAction.Undefined:
-                    ResetSelectingPossibility();
+                    //ResetSelectingPossibility();
                     break;
                 case MouseAction.MapSelection:
-                    TryToSelect();
+                    //TryToSelect();
                     break;
                 case MouseAction.MapDragMovement:
                     TryToInvokeDragMapMovement();
                     break;
                 case MouseAction.MapScrollMovement:
-                    TryToInvokeScrollMapMovement();
+                   TryToInvokeScrollMapMovement();
                     break;
                 default:
                     break;
             }
 
-            if (isZooming == false)
-            {
-                TryToZoomMap();
+            if (isZooming == false) {
+//                TryToZoomMap();
             }
 
             ClampCameraMovement();
@@ -127,99 +114,94 @@ namespace DefaultNamespace
 
         void ResetSelectingPossibility() {
             isSelected = false;
-            
+
             houseSelector.TryToHighlightObject(thisCamera.ScreenPointToRay(mouseInputData.pointerPosition));
         }
-        
+
         void TryToSelect() {
-            if (isSelected) 
+            if (isSelected)
                 return;
             Debug.Log("[MOCameraMovement] Select");
             isSelected = true;
             houseSelector.Show(thisCamera.ScreenPointToRay(mouseInputData.pointerActionPosition));
         }
 
-        void TryToInvokeDragMapMovement()
-        {
+        void TryToInvokeDragMapMovement() {
             if (mouseInputData.mouseAction != MouseAction.MapDragMovement)
                 return;
 
             Debug.Log("[MOCameraMovement] Drag");
             var pointerPosition = mouseInputData.pointerActionPosition;
             var dragPos = new Vector3(pointerPosition.x, 0, pointerPosition.y);
-            UpdateCameraPosition(dragPos, cameraSettings.mouseMapDragSpeedMultiplier,
-                cameraSettings.mouseMapDragSensitivity);
+            UpdateCameraPosition(dragPos, cameraSetup.cameraSettings.dragTweenProperties);
         }
 
 
-        void TryToZoomMap()
-        {
-            var scrollValue = mouseInputData.scrollValue;
-            if (scrollValue == 0 || isZooming)
-                return;
-
-            Debug.Log("[MOCameraMovement] Zoom");
-            var zoomDelta = cameraSettings.zoomDistanceStep * Mathf.Sign(scrollValue);
-            var currentPos = thisTransform.localPosition;
-            var nextZoom = currentZoom - zoomDelta;
-            currentZoom = nextZoom;
-            if (nextZoom >= minZoom && nextZoom <= maxZoom)
-            {
-                var scrollVec = currentPos + zoomDelta * thisTransform.forward;
-                StartCoroutine(SmoothZoom(currentPos, scrollVec));
+//        void TryToZoomMap()
+//        {
+//            var scrollValue = mouseInputData.scrollValue;
+//            if (scrollValue == 0 || isZooming)
+//                return;
+//
+//            Debug.Log("[MOCameraMovement] Zoom");
+//            var zoomDelta = cameraSettings.zoomDistanceStep * Mathf.Sign(scrollValue);
+//            var currentPos = thisTransform.localPosition;
+//            var nextZoom = currentZoom - zoomDelta;
+//            currentZoom = nextZoom;
+//            if (nextZoom >= minZoom && nextZoom <= maxZoom)
+//            {
+//                var scrollVec = currentPos + zoomDelta * thisTransform.forward;
+//                StartCoroutine(SmoothZoom(currentPos, scrollVec));
+//            }
+//            currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
+//        }
+//
+////todo: change it to smooth util (hf) and ease in out animation
+//        IEnumerator SmoothZoom(Vector3 from, Vector3 to, Action onEnd = null)
+//        {
+//            var t = 0f;
+//            isZooming = true;
+//            while (t < cameraSettings.smoothZoomTime)
+//            {
+//                t += dt;
+//                transform.position = Vector3.Lerp(from, to, t / cameraSettings.smoothZoomTime);
+//                yield return null;
+//            }
+//
+//            isZooming = false;
+//        }
+        /// /////////////////////////////////
+        void TryToInvokeScrollMapMovement() {
+            switch (mouseInputData.mouseAction) {
+                case MouseAction.MapScrollMovement: {
+                    Debug.Log("[MOCameraMovement] Scroll map");
+                    var mapScrollDirection = PointerEdgePositionToScrollDirection();
+                    PointerEdgePositionToScrollDirection();
+                    UpdateCameraPosition(mapScrollDirection, cameraSetup.cameraSettings.scrollTweenProperties);
+                    break;
+                }
+                case MouseAction.Undefined:
+                    thisTransform.DOPause();
+                    break;
             }
-            currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
         }
 
-//todo: change it to smooth util (hf) and ease in out animation
-        IEnumerator SmoothZoom(Vector3 from, Vector3 to, Action onEnd = null)
-        {
-            var t = 0f;
-            isZooming = true;
-            while (t < cameraSettings.smoothZoomTime)
-            {
-                t += dt;
-                transform.position = Vector3.Lerp(from, to, t / cameraSettings.smoothZoomTime);
-                yield return null;
-            }
-
-            isZooming = false;
-        }
-/// /////////////////////////////////
-        void TryToInvokeScrollMapMovement()
-        {
-            if (mouseInputData.mouseAction != MouseAction.MapScrollMovement)
-                return;
-
-            Debug.Log("[MOCameraMovement] Scroll map");
-            var mapScrollDirection = PointerEdgePositionToScrollDirection();
-            PointerEdgePositionToScrollDirection();
-            UpdateCameraPosition(mapScrollDirection, cameraSettings.mouseMapScrollSpeedMultiplier,
-                cameraSettings.mouseMapDragSensitivity);
-        }
-
-        Vector3 PointerEdgePositionToScrollDirection()
-        {
+        Vector3 PointerEdgePositionToScrollDirection() {
             var pointerPosition = mouseInputData.pointerActionPosition;
             var scrollDirectionX = RescaleViewportMinMaxCoordinate(pointerPosition.x, -1, 1f);
             var scrollDirectionZ = RescaleViewportMinMaxCoordinate(pointerPosition.y, -1, 1f);
             return new Vector3(scrollDirectionX, 0, scrollDirectionZ).normalized;
         }
 
-        float RescaleViewportMinMaxCoordinate(float oldVal, float newMin, float newMax)
-        {
+        float RescaleViewportMinMaxCoordinate(float oldVal, float newMin, float newMax) {
             return (oldVal) * (newMax - newMin) + newMin;
         }
 
-        void UpdateCameraPosition(Vector3 deltaPosition, float multiplierSpeed, float sensitivity)
-        {
+        void UpdateCameraPosition(Vector3 deltaPosition, TweenProperty tweenProperty) {
             var currentPos = thisTransform.localPosition;
-            var positionChangeMultiplier = multiplierSpeed * dt * sensitivity;
-            var desiredPosChange = deltaPosition * positionChangeMultiplier;
+            var desiredPosChange = deltaPosition * tweenProperty.positionDeltaMultiplier;
             var newPos = currentPos + desiredPosChange;
-            var smoothedPos =
-                Vector3.Slerp(currentPos, newPos, cameraSettings.cameraMoveSmoothing);
-            thisTransform.localPosition = smoothedPos;
+            thisTransform.DOLocalMove(newPos, tweenProperty.tweenTime).SetEase(tweenProperty.easeType);
         }
     }
 }

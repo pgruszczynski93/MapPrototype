@@ -91,7 +91,11 @@ namespace Code_MapOfOrders.Logic
 
             mouseMovementDelta = mainCamera.ScreenToViewportPoint(mousePosition - lastMousePointerPosition);
 
-            RecognizeScreenEdgeAction(ResetMouseActions,
+            RecognizeScreenEdgeAction(()=> {
+                    ResetMouseActions();
+                    inputData.pointerActionPosition = mainCamera.ScreenToViewportPoint(mousePosition);
+
+                },
                 SetScrollMapProperties);
         }
 

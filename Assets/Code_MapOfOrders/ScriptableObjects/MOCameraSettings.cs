@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace HGTV.MapsOfOrders {
@@ -6,13 +7,19 @@ namespace HGTV.MapsOfOrders {
         [Range(0, 25)] public float maxZoomValue;
         [Range(0, 180)] public float cameraFov;
         [Range(0, 10)] public float zoomDistanceStep;
-        [Range(0f, 1f)] public float smoothZoomTime;
-        [Range(0f, 1f)] public float cameraMoveSmoothing;
-        [Range(0.1f, 100f)] public float mouseMapScrollSpeedMultiplier;
-        [Range(0.1f, 500f)] public float mouseMapDragSpeedMultiplier;
-        [Range(0.1f, 10f)] public float mouseMapDragSensitivity;
+
+        public TweenProperty dragTweenProperties;
+        public TweenProperty zoomTweenProperties;
+        public TweenProperty scrollTweenProperties;
 
         public Vector3 cameraMapSpawnPosition;
         public Vector3 cameraLookAtAngle;
+    }
+    
+    [System.Serializable]
+    public struct TweenProperty {
+        public Ease easeType;
+        [Range(0f, 10f)] public float tweenTime;
+        [Range(0f, 500f)] public float positionDeltaMultiplier;
     }
 }
