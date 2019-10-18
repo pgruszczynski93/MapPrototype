@@ -8,9 +8,11 @@ using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
-namespace DefaultNamespace {
+namespace DefaultNamespace
+{
     [RequireComponent(typeof(Camera), typeof(MOCameraMovementArea))]
-    public class MOCameraMovement : MonoBehaviour {
+    public class MOCameraMovement : MonoBehaviour
+    {
         [SerializeField] MOCameraSettings cameraSettings;
         [SerializeField] MOCameraSetup cameraSetup;
 
@@ -21,6 +23,7 @@ namespace DefaultNamespace {
         [SerializeField] MOBorders movementBorders;
 
         bool isZooming;
+        bool isZoomLimitReached;
         bool isSelected;
         bool initialised;
 
@@ -30,11 +33,13 @@ namespace DefaultNamespace {
 
         MOMouseInputData mouseInputData;
 
-        void Start() {
+        void Start()
+        {
             Initialise();
         }
 
-        void Initialise() {
+        void Initialise()
+        {
             if (initialised)
                 return;
 
@@ -43,25 +48,30 @@ namespace DefaultNamespace {
             LoadAndApplySettings();
         }
 
-        void OnEnable() {
+        void OnEnable()
+        {
             AssignEvents();
         }
 
-        void OnDisable() {
+        void OnDisable()
+        {
             RemoveEvents();
         }
 
-        void AssignEvents() {
+        void AssignEvents()
+        {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate += HandleMouseMovementActions;
         }
 
-        void RemoveEvents() {
+        void RemoveEvents()
+        {
             MOEvents.OnMouseInputCollected -= HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate -= HandleMouseMovementActions;
         }
 
-        void ClampCameraMovement() {
+        void ClampCameraMovement()
+        {
             var clampedLocalPos = thisTransform.localPosition;
             clampedLocalPos.x = Mathf.Clamp(clampedLocalPos.x, movementBorders.left, movementBorders.right);
             clampedLocalPos.y = Mathf.Clamp(clampedLocalPos.y, minZoom, maxZoom);
@@ -69,7 +79,8 @@ namespace DefaultNamespace {
             thisTransform.localPosition = clampedLocalPos;
         }
 
-        void LoadAndApplySettings() {
+        void LoadAndApplySettings()
+        {
             cameraSettings = cameraSetup.cameraSettings;
             thisCamera.fieldOfView = cameraSettings.cameraFov;
             thisTransform.localPosition = cameraSettings.cameraMapSpawnPosition;
@@ -80,12 +91,15 @@ namespace DefaultNamespace {
             maxZoom = startHeight + cameraSettings.maxZoomValue;
         }
 
-        void HandleMouseInputCollectedReceived(MOMouseInputData inputData) {
+        void HandleMouseInputCollectedReceived(MOMouseInputData inputData)
+        {
             mouseInputData = inputData;
         }
 
-        void HandleMouseMovementActions() {
-            switch (mouseInputData.mouseAction) {
+        void HandleMouseMovementActions()
+        {
+            switch (mouseInputData.mouseAction)
+            {
                 case MouseAction.Undefined:
                     //ResetSelectingPossibility();
                     break;
@@ -96,26 +110,29 @@ namespace DefaultNamespace {
                     TryToInvokeDragMapMovement();
                     break;
                 case MouseAction.MapScrollMovement:
-//                   TryToInvokeScrollMapMovement();
+                    TryToInvokeScrollMapMovement();
                     break;
                 default:
                     break;
             }
 
-            if (isZooming == false) {
+            if (isZooming == false)
+            {
                 TryToZoomMap();
             }
 
             ClampCameraMovement();
         }
 
-        void ResetSelectingPossibility() {
+        void ResetSelectingPossibility()
+        {
             isSelected = false;
 
             houseSelector.TryToHighlightObject(thisCamera.ScreenPointToRay(mouseInputData.pointerPosition));
         }
 
-        void TryToSelect() {
+        void TryToSelect()
+        {
             if (isSelected)
                 return;
             Debug.Log("[MOCameraMovement] Select");
@@ -123,7 +140,8 @@ namespace DefaultNamespace {
             houseSelector.Show(thisCamera.ScreenPointToRay(mouseInputData.pointerActionPosition));
         }
 
-        void TryToInvokeDragMapMovement() {
+        void TryToInvokeDragMapMovement()
+        {
             if (mouseInputData.mouseAction != MouseAction.MapDragMovement)
                 return;
 
@@ -134,7 +152,8 @@ namespace DefaultNamespace {
         }
 
 
-        void TryToZoomMap() {
+        void TryToZoomMap()
+        {
             var scrollValue = mouseInputData.scrollValue;
             if (scrollValue == 0 || isZooming)
                 return;
@@ -146,31 +165,45 @@ namespace DefaultNamespace {
             var nextZoom = currentZoom - zoomDelta;
 
             var positionAfterScroll = currentPos + zoomDelta * thisTransform.forward;
-            var afterScrollY = Mathf.Clamp(positionAfterScroll.y, minZoom, maxZoom);
-            var clampedPositionAfterScroll = new Vector3(positionAfterScroll.x, afterScrollY, positionAfterScroll.z);
 
-            // poprawić to
-            Debug.Log("B scroll " + positionAfterScroll.y);
-            if ((positionAfterScroll.y <= minZoom && zoomSign > 0) ||
-                (positionAfterScroll.y >= maxZoom && zoomSign < 0)) {
+//            Debug.Log("B scroll " + positionAfterScroll.y);
+            if (IsOutOfZoomingLimit(positionAfterScroll, zoomSign))
+            {
+                if (isZoomLimitReached)
+                    return;
+                var afterScrollY = Mathf.Clamp(positionAfterScroll.y, minZoom, maxZoom);
+                var clampedPositionAfterScroll =
+                    new Vector3(positionAfterScroll.x, afterScrollY, positionAfterScroll.z);
+
                 thisTransform
                     .DOMove(clampedPositionAfterScroll, cameraSetup.cameraSettings.zoomTweenProperties.tweenTime)
                     .SetEase(cameraSetup.cameraSettings.zoomTweenProperties.easeType)
-                    .OnComplete(() => currentZoom = Mathf.Clamp(nextZoom, minZoom, maxZoom));
-            }
-            else {
-                thisTransform
-                    .DOMove(clampedPositionAfterScroll, cameraSetup.cameraSettings.zoomTweenProperties.tweenTime)
-                    .SetEase(cameraSetup.cameraSettings.zoomTweenProperties.easeType)
-                    .OnComplete(() => currentZoom = Mathf.Clamp(nextZoom, minZoom, maxZoom));
-            }
+                    .OnComplete(() => { currentZoom = Mathf.Clamp(nextZoom, minZoom, maxZoom); });
 
+                isZoomLimitReached = true;
+            }
+            else
+            {
+                thisTransform
+                    .DOMove(positionAfterScroll, cameraSetup.cameraSettings.zoomTweenProperties.tweenTime)
+                    .SetEase(cameraSetup.cameraSettings.zoomTweenProperties.easeType)
+                    .OnComplete(() => { currentZoom = Mathf.Clamp(nextZoom, minZoom, maxZoom); });
+                isZoomLimitReached = false;
+            }
         }
 
-        void TryToInvokeScrollMapMovement() {
+        private bool IsOutOfZoomingLimit(Vector3 positionAfterScroll, float zoomSign)
+        {
+            return positionAfterScroll.y <= minZoom && zoomSign > 0 ||
+                   positionAfterScroll.y >= maxZoom && zoomSign < 0;
+        }
+
+        void TryToInvokeScrollMapMovement()
+        {
             if (mouseInputData.mouseAction != MouseAction.MapScrollMovement)
                 thisTransform.DOPause();
-            else {
+            else
+            {
                 Debug.Log("[MOCameraMovement] Scroll map");
                 var mapScrollDirection = PointerEdgePositionToScrollDirection();
                 PointerEdgePositionToScrollDirection();
@@ -178,18 +211,21 @@ namespace DefaultNamespace {
             }
         }
 
-        Vector3 PointerEdgePositionToScrollDirection() {
+        Vector3 PointerEdgePositionToScrollDirection()
+        {
             var pointerPosition = mouseInputData.pointerActionPosition;
             var scrollDirectionX = RescaleViewportMinMaxCoordinate(pointerPosition.x, -1, 1f);
             var scrollDirectionZ = RescaleViewportMinMaxCoordinate(pointerPosition.y, -1, 1f);
             return new Vector3(scrollDirectionX, 0, scrollDirectionZ).normalized;
         }
 
-        float RescaleViewportMinMaxCoordinate(float oldVal, float newMin, float newMax) {
+        float RescaleViewportMinMaxCoordinate(float oldVal, float newMin, float newMax)
+        {
             return (oldVal) * (newMax - newMin) + newMin;
         }
 
-        void UpdateCameraPosition(Vector3 deltaPosition, TweenProperty tweenProperty) {
+        void UpdateCameraPosition(Vector3 deltaPosition, TweenProperty tweenProperty)
+        {
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = deltaPosition * tweenProperty.positionDeltaMultiplier;
             var newPos = currentPos + desiredPosChange;
