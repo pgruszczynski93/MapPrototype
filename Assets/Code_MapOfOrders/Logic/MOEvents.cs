@@ -5,7 +5,6 @@ namespace DefaultNamespace {
     public static class MOEvents {
 
         public static event Action OnMapStarted;
-        public static event Action OnLaptopMapIconSelected;
         public static event Action OnUpdate;
         public static event Action OnLateUpdate;
         
@@ -13,10 +12,6 @@ namespace DefaultNamespace {
                 
         public static void BroadcastOnMapStarted() {
             OnMapStarted?.Invoke();
-        }
-        
-        public static void BroadcastOnMapIconSelected() {
-            OnLaptopMapIconSelected?.Invoke();
         }
         
         public static void BroadcastOnUpdate() {

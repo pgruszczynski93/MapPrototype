@@ -20,7 +20,8 @@ namespace Code_MapOfOrders.Logic
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = dragPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
             var newPos = currentPos + desiredPosChange;
-            thisTransform.DOLocalMove(newPos, tweenSetup.tweenSettings.tweenTime)
+            thisTransform
+                .DOLocalMove(newPos, tweenSetup.tweenSettings.tweenTime)
                 .SetEase(tweenSetup.tweenSettings.easeType);
         }
     }

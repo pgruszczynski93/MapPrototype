@@ -16,10 +16,12 @@ namespace Code_MapOfOrders.Logic
 
         protected override void UpdatePosition()
         {
+            Debug.Log("[MOCameraMovement] Scroll");
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = zoomPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
             var newPos = currentPos + desiredPosChange;
-            thisTransform.DOLocalMove(newPos, tweenSetup.tweenSettings.tweenTime)
+            thisTransform
+                .DOLocalMove(newPos, tweenSetup.tweenSettings.tweenTime)
                 .SetEase(tweenSetup.tweenSettings.easeType);
         }
 

@@ -5,16 +5,14 @@ namespace Code_MapOfOrders.Logic
 {
     public abstract class MOCameraMovement : MonoBehaviour
     {
-        [SerializeField] protected MOCameraSettings cameraSettings;
-        [SerializeField] protected MOCameraSetup cameraSetup;
         [SerializeField] protected TweenSetup tweenSetup;
 
-        [SerializeField] protected Camera thisCamera;
-        [SerializeField] protected Transform thisTransform;
-        [SerializeField] protected MOHouseSelector houseSelector;
+        protected MOCameraSettings cameraSettings;
+        protected Camera thisCamera;
+        protected Transform thisTransform;
 
         bool initialised;
-        
+
         protected abstract void UpdatePosition();
 
         void Start()
@@ -28,16 +26,16 @@ namespace Code_MapOfOrders.Logic
                 return;
 
             initialised = true;
-            LoadAndApplySettings();
         }
 
-        void LoadAndApplySettings()
+        public void SetupMovement(MOCameraSetup setup, Camera cam)
         {
-            cameraSettings = cameraSetup.cameraSettings;
+            cameraSettings = setup.cameraSettings;
+            thisCamera = cam;
+            thisTransform = cam.transform;
             thisCamera.fieldOfView = cameraSettings.cameraFov;
             thisTransform.localPosition = cameraSettings.cameraMapSpawnPosition;
             thisTransform.localRotation = Quaternion.Euler(cameraSettings.cameraLookAtAngle);
         }
-        
     }
 }

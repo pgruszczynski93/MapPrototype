@@ -100,6 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272909cfe14a82b4bbde443872b2d892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapOrderCamera: {fileID: 4233181020137376642}
+  cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
   cameraDrag: {fileID: 3682419639555937850}
   cameraZoom: {fileID: 0}
   cameraScroll: {fileID: 5623816698090408495}
@@ -136,11 +138,7 @@ MonoBehaviour:
     cameraFov: 0
     cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
     cameraLookAtAngle: {x: 0, y: 0, z: 0}
-  cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
   tweenSetup: {fileID: 11400000, guid: 37346a78818455340b8a6307bd557c01, type: 2}
-  thisCamera: {fileID: 4233181020137376642}
-  thisTransform: {fileID: 4233181020137376643}
-  houseSelector: {fileID: 4233181019628937684}
 --- !u!114 &5623816698090408495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,11 +156,7 @@ MonoBehaviour:
     cameraFov: 0
     cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
     cameraLookAtAngle: {x: 0, y: 0, z: 0}
-  cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
   tweenSetup: {fileID: 11400000, guid: 10e6ee84443e7c5469780704ddfbe598, type: 2}
-  thisCamera: {fileID: 4233181020137376642}
-  thisTransform: {fileID: 4233181020137376643}
-  houseSelector: {fileID: 4233181019628937684}
 --- !u!114 &7676692610823444341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,12 +170,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 4233181020137376643}
+  cameraMovementArea: {fileID: 877348938}
   movementBorders:
     top: 0
     bottom: 0
     left: 0
     right: 0
-  cameraMovementArea: {fileID: 877348938}
 --- !u!114 &4233181019628937684
 MonoBehaviour:
   m_ObjectHideFlags: 0

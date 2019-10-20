@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-    [RequireComponent(typeof(Camera), typeof(MOCameraMovementArea))]
-    public class MOCameraInputInterpreter : MonoBehaviour
+    public class MOCameraBehaviour : MonoBehaviour
     {
         bool isZooming;
         bool isZoomLimitReached;
@@ -16,12 +15,28 @@ namespace DefaultNamespace
         float maxZoom;
         float currentZoom;
 
+        [SerializeField] Camera mapOrderCamera;
+        [SerializeField] MOCameraSetup cameraSetup;
+
         [SerializeField] MOCameraDrag cameraDrag;
         [SerializeField] MOCameraZoom cameraZoom;
         [SerializeField] MOCameraScroll cameraScroll;
+//        [SerializeField] protected MOHouseSelector houseSelector;
 
         MOMouseInputData mouseInputData;
 
+        void Initialise()
+        {
+            cameraDrag.SetupMovement(cameraSetup, mapOrderCamera);
+            cameraScroll.SetupMovement(cameraSetup, mapOrderCamera);
+//            cameraZoom.SetupMovement(cameraSetup, mapOrderCamera);
+        }
+
+        void Start()
+        {
+            Initialise();
+        }
+        
         void OnEnable()
         {
             AssignEvents();
@@ -93,17 +108,6 @@ namespace DefaultNamespace
 //            houseSelector.Show(thisCamera.ScreenPointToRay(mouseInputData.pointerActionPosition));
 //        }
 //
-//        void TryToInvokeDragMapMovement()
-//        {
-//            if (mouseInputData.mouseAction != MouseAction.MapDragMovement)
-//                return;
-//
-//            Debug.Log("[MOCameraMovement] Drag");
-//            var pointerPosition = mouseInputData.pointerActionPosition;
-//            var dragPos = new Vector3(pointerPosition.x, 0, pointerPosition.y);
-//            UpdateCameraPosition(dragPos, cameraSetup.cameraSettings.dragTweenProperties);
-//        }
-
 
 //        void TryToZoomMap()
 //        {
@@ -164,25 +168,5 @@ namespace DefaultNamespace
 //            }
 //        }
 //
-//        Vector3 PointerEdgePositionToScrollDirection()
-//        {
-//            var pointerPosition = mouseInputData.pointerActionPosition;
-//            var scrollDirectionX = RescaleViewportMinMaxCoordinate(pointerPosition.x, -1, 1f);
-//            var scrollDirectionZ = RescaleViewportMinMaxCoordinate(pointerPosition.y, -1, 1f);
-//            return new Vector3(scrollDirectionX, 0, scrollDirectionZ).normalized;
-//        }
-//
-//        float RescaleViewportMinMaxCoordinate(float oldVal, float newMin, float newMax)
-//        {
-//            return (oldVal) * (newMax - newMin) + newMin;
-//        }
-//
-//        void UpdateCameraPosition(Vector3 deltaPosition, TweenProperty tweenProperty)
-//        {
-//            var currentPos = thisTransform.localPosition;
-//            var desiredPosChange = deltaPosition * tweenProperty.positionDeltaMultiplier;
-//            var newPos = currentPos + desiredPosChange;
-//            thisTransform.DOLocalMove(newPos, tweenProperty.tweenTime).SetEase(tweenProperty.easeType);
-//        }
     }
 }
