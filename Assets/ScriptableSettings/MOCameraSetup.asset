@@ -24,8 +24,8 @@ MonoBehaviour:
       tweenTime: 0.6
       positionDeltaMultiplier: 10
     zoomTweenProperties:
-      easeType: 21
-      tweenTime: 0.3
+      easeType: 27
+      tweenTime: 0.2
       positionDeltaMultiplier: 5
     cameraMapSpawnPosition: {x: 10, y: 20, z: 0}
     cameraLookAtAngle: {x: 55, y: 355, z: 0}

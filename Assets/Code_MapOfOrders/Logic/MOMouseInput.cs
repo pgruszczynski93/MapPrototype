@@ -65,14 +65,14 @@ namespace Code_MapOfOrders.Logic
 
             inputData.pointerPosition = mousePosition;
             
-            TryToSelect();
+            TryToSetSelectInput();
             TryToSetScrollInput();
             TryToSetDragInput();
             
             MOEvents.BroadcastOnMouseInput(inputData);
         }
 
-        void TryToSelect() {
+        void TryToSetSelectInput() {
             if (!IsSelectionButtonPressed()) 
                 return;
             

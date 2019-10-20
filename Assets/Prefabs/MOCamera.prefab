@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 4233181020137376669}
   - component: {fileID: 3087744889426965066}
   - component: {fileID: 877348938}
+  - component: {fileID: 3682419639555937850}
+  - component: {fileID: 5623816698090408495}
+  - component: {fileID: 7676692610823444341}
   - component: {fileID: 4233181019628937684}
   m_Layer: 0
   m_Name: MOCamera
@@ -97,34 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272909cfe14a82b4bbde443872b2d892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraSettings:
-    maxZoomValue: 0
-    cameraFov: 0
-    zoomDistanceStep: 0
-    dragTweenProperties:
-      easeType: 0
-      tweenTime: 0
-      positionDeltaMultiplier: 0
-    scrollTweenProperties:
-      easeType: 0
-      tweenTime: 0
-      positionDeltaMultiplier: 0
-    zoomTweenProperties:
-      easeType: 0
-      tweenTime: 0
-      positionDeltaMultiplier: 0
-    cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
-    cameraLookAtAngle: {x: 0, y: 0, z: 0}
-  cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
-  thisCamera: {fileID: 4233181020137376642}
-  thisTransform: {fileID: 4233181020137376643}
-  cameraMovementArea: {fileID: 877348938}
-  houseSelector: {fileID: 4233181019628937684}
-  movementBorders:
-    top: 0
-    bottom: 0
-    left: 0
-    right: 0
+  cameraDrag: {fileID: 3682419639555937850}
+  cameraZoom: {fileID: 0}
+  cameraScroll: {fileID: 5623816698090408495}
 --- !u!114 &877348938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +119,69 @@ MonoBehaviour:
   rightBorder: {fileID: 0}
   topBorder: {fileID: 0}
   bottomBorder: {fileID: 0}
+--- !u!114 &3682419639555937850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4233181020137376668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14cddacdb2d44f5a994721cbc7450487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraSettings:
+    maxZoomValue: 0
+    cameraFov: 0
+    cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
+    cameraLookAtAngle: {x: 0, y: 0, z: 0}
+  cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
+  tweenSetup: {fileID: 11400000, guid: 37346a78818455340b8a6307bd557c01, type: 2}
+  thisCamera: {fileID: 4233181020137376642}
+  thisTransform: {fileID: 4233181020137376643}
+  houseSelector: {fileID: 4233181019628937684}
+--- !u!114 &5623816698090408495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4233181020137376668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42bb03e9d2745459824966ad27decc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraSettings:
+    maxZoomValue: 0
+    cameraFov: 0
+    cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
+    cameraLookAtAngle: {x: 0, y: 0, z: 0}
+  cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
+  tweenSetup: {fileID: 11400000, guid: 10e6ee84443e7c5469780704ddfbe598, type: 2}
+  thisCamera: {fileID: 4233181020137376642}
+  thisTransform: {fileID: 4233181020137376643}
+  houseSelector: {fileID: 4233181019628937684}
+--- !u!114 &7676692610823444341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4233181020137376668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c82c254489d408f8856acded35cf12f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 4233181020137376643}
+  movementBorders:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+  cameraMovementArea: {fileID: 877348938}
 --- !u!114 &4233181019628937684
 MonoBehaviour:
   m_ObjectHideFlags: 0
