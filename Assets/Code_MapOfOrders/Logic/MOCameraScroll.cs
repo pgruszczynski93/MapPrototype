@@ -6,20 +6,19 @@ namespace Code_MapOfOrders.Logic
 {
     public class MOCameraScroll : MOCameraMovement
     {
-        Vector3 zoomPosition;
+        Vector3 scaledViewportPosition;
         Vector3 newScrolledPosition;
 
         public void TryToInvokeScrollMovement(Vector3 pointerPos)
         {
-            zoomPosition = PointerEdgePositionToScrollDirection(pointerPos);
+            scaledViewportPosition = PointerEdgePositionToScrollDirection(pointerPos);
             UpdatePosition();
         }
 
         protected override void UpdatePosition()
         {
-            Debug.Log("[MOCameraMovement] Scroll");
             var currentPos = thisTransform.localPosition;
-            var desiredPosChange = zoomPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
+            var desiredPosChange = scaledViewportPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
             newScrolledPosition = currentPos + desiredPosChange;
             PlayTween(newScrolledPosition);
         }

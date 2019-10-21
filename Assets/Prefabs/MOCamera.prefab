@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 877348938}
   - component: {fileID: 3682419639555937850}
   - component: {fileID: 5623816698090408495}
+  - component: {fileID: 8075847063767975852}
   - component: {fileID: 7676692610823444341}
   - component: {fileID: 4233181019628937684}
   m_Layer: 0
@@ -103,8 +104,8 @@ MonoBehaviour:
   mapOrderCamera: {fileID: 4233181020137376642}
   cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
   cameraDrag: {fileID: 3682419639555937850}
-  cameraZoom: {fileID: 0}
   cameraScroll: {fileID: 5623816698090408495}
+  cameraZoom: {fileID: 8075847063767975852}
 --- !u!114 &877348938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,11 +134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14cddacdb2d44f5a994721cbc7450487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraSettings:
-    maxZoomValue: 0
-    cameraFov: 0
-    cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
-    cameraLookAtAngle: {x: 0, y: 0, z: 0}
   tweenSetup: {fileID: 11400000, guid: 37346a78818455340b8a6307bd557c01, type: 2}
 --- !u!114 &5623816698090408495
 MonoBehaviour:
@@ -151,12 +147,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a42bb03e9d2745459824966ad27decc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraSettings:
-    maxZoomValue: 0
-    cameraFov: 0
-    cameraMapSpawnPosition: {x: 0, y: 0, z: 0}
-    cameraLookAtAngle: {x: 0, y: 0, z: 0}
   tweenSetup: {fileID: 11400000, guid: 10e6ee84443e7c5469780704ddfbe598, type: 2}
+--- !u!114 &8075847063767975852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4233181020137376668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf2e64f0df2e45d190a29f92530ba908, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenSetup: {fileID: 11400000, guid: 586cc68beac49fd47b076b2920f50568, type: 2}
 --- !u!114 &7676692610823444341
 MonoBehaviour:
   m_ObjectHideFlags: 0

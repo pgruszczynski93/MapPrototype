@@ -8,7 +8,6 @@ namespace Code_MapOfOrders.Logic {
         Vector3 newDragPosition;
 
         public void TryToInvokeDragMovement(Vector3 pointerPos) {
-            Debug.Log("[MOCameraMovement] Drag");
             dragPosition = new Vector3(pointerPos.x, 0, pointerPos.y);
             UpdatePosition();
         }

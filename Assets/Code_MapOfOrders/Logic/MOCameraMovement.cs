@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using HGTV.MapsOfOrders;
 using UnityEngine;
 
@@ -26,9 +27,10 @@ namespace Code_MapOfOrders.Logic {
                 .SetEase(tweenSetup.tweenSettings.easeType);
         }
 
-        protected void PlayTween(Vector3 tweenTargetPos) {
+        protected void PlayTween(Vector3 tweenTargetPos, Action onTweenComplete = null) {
             tweener.ChangeEndValue(tweenTargetPos, true)
-                 .Restart();
+                .OnComplete(() => { onTweenComplete?.Invoke(); })
+                .Restart();
         }
 
         public void PauseTween() {
