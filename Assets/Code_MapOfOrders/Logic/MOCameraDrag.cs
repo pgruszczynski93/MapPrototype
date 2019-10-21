@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Code_MapOfOrders.Logic {
     public class MOCameraDrag : MOCameraMovement {
+
+        [SerializeField] MOCameraZoom cameraZoom;
+        
         Vector3 dragPosition;
         Vector3 newDragPosition;
 
@@ -14,7 +17,11 @@ namespace Code_MapOfOrders.Logic {
 
         protected override void UpdatePosition() {
             var currentPos = thisTransform.localPosition;
-            var desiredPosChange = dragPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
+//            Debug.Log("XD "+(cameraZoom.CurrentZoomStep
+//                             * tweenSetup.tweenSettings.positionDeltaMultiplier));
+            var desiredPosChange = dragPosition
+                                   * cameraZoom.CurrentZoomStep
+                                   * tweenSetup.tweenSettings.positionDeltaMultiplier ;
             newDragPosition = currentPos + desiredPosChange;
             PlayTween(newDragPosition);
         }

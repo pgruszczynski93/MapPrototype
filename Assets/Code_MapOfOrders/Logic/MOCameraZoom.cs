@@ -11,6 +11,13 @@ namespace Code_MapOfOrders.Logic {
         float maxZoom;
         float currentZoom;
 
+        public float CurrentZoomStep {
+            get {
+                Debug.Log((currentZoom - minZoom) / tweenSetup.tweenSettings.positionDeltaMultiplier + 1);
+                return (currentZoom - minZoom) / tweenSetup.tweenSettings.positionDeltaMultiplier + 1;
+            }
+        }
+
         public void TryToInvokeZoomMovement(int scrollValue) {
             scrollDeltaValue = scrollValue;
 
@@ -36,9 +43,10 @@ namespace Code_MapOfOrders.Logic {
 
         protected override void UpdatePosition() {
             var zoomSign = Mathf.Sign(scrollDeltaValue);
-            var zoomDelta = tweenSetup.tweenSettings.positionDeltaMultiplier * zoomSign;
+            var zoomDelta = tweenSetup.tweenSettings.positionDeltaMultiplier * scrollDeltaValue;
             var currentPos = thisTransform.localPosition;
-            var nextZoom = currentZoom - zoomDelta;
+            
+            Debug.Log("zd " +zoomDelta);
 
             var positionAfterScroll = currentPos + zoomDelta * thisTransform.forward;
 
@@ -50,17 +58,15 @@ namespace Code_MapOfOrders.Logic {
                 var clampedPositionAfterScroll =
                     new Vector3(positionAfterScroll.x, yLimit, positionAfterScroll.z);
 
-                PlayTween(clampedPositionAfterScroll,
-                    () => { currentZoom = Mathf.Clamp(nextZoom, minZoom, maxZoom); });
+                PlayTween(clampedPositionAfterScroll);
 
                 isZoomLimitReached = true;
             }
             else {
                 PlayTween(positionAfterScroll,
-                    () => { currentZoom = Mathf.Clamp(nextZoom, minZoom, maxZoom); });
+                    () => { currentZoom = Mathf.Clamp(currentZoom - zoomDelta, minZoom, maxZoom); });
                 isZoomLimitReached = false;
             }
-
         }
 
 

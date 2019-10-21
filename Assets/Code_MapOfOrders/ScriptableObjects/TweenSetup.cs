@@ -14,6 +14,6 @@ namespace HGTV.MapsOfOrders
     {
         public Ease easeType;
         [Range(0f, 10f)] public float tweenTime;
-        [Range(0f, 500f)] public float positionDeltaMultiplier;
+        [Range(0f, 50f)] public float positionDeltaMultiplier;
     }
 }
