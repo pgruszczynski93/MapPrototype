@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Zoom Tween Setup
   m_EditorClassIdentifier: 
   tweenSettings:
-    easeType: 0
-    tweenTime: 0.3
+    easeType: 7
+    tweenTime: 0.2
     positionDeltaMultiplier: 5

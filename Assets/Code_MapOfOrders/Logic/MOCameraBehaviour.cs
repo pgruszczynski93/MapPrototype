@@ -15,7 +15,6 @@ namespace DefaultNamespace {
 
         [SerializeField] MOCameraDrag cameraDrag;
         [SerializeField] MOCameraScroll cameraScroll;
-
         [SerializeField] MOCameraZoom cameraZoom;
 //        [SerializeField] protected MOHouseSelector houseSelector;
 
@@ -67,8 +66,8 @@ namespace DefaultNamespace {
                     cameraDrag.TryToInvokeDragMovement(mouseInputData.pointerActionPosition);
                     break;
                 case MouseAction.MapScrollMovement:
-//                    cameraDrag.PauseTween();
-//                    cameraScroll.TryToInvokeScrollMovement(mouseInputData.pointerActionPosition);
+                    cameraDrag.PauseTween();
+                    cameraScroll.TryToInvokeScrollMovement(mouseInputData.pointerActionPosition);
                     break;
             }
             cameraZoom.TryToInvokeZoomMovement(mouseInputData.scrollValue);

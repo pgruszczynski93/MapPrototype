@@ -21,22 +21,22 @@ namespace Code_MapOfOrders.Logic {
                 return;
 
             initialised = true;
-            tweener = thisTransform
-                .DOLocalMove(thisTransform.localPosition, tweenSetup.tweenSettings.tweenTime)
+            tweener
                 .SetAutoKill(false)
                 .SetEase(tweenSetup.tweenSettings.easeType);
         }
 
         protected void PlayTween(Vector3 tweenTargetPos, Action onTweenComplete = null) {
-            tweener.ChangeEndValue(tweenTargetPos, true)
-                .OnComplete(() => { onTweenComplete?.Invoke(); })
-                .Restart();
+            tweener = thisTransform
+                .DOLocalMove(tweenTargetPos, tweenSetup.tweenSettings.tweenTime)
+                .OnComplete(() => {
+                    onTweenComplete?.Invoke(); 
+                });
         }
 
         public void PauseTween() {
             tweener.Pause();
         }
-
 
         public void SetupMovement(MOCameraSetup setup, Camera cam) {
             cameraSettings = setup.cameraSettings;
