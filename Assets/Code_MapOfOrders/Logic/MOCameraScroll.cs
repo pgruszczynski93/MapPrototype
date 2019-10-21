@@ -7,7 +7,8 @@ namespace Code_MapOfOrders.Logic
     public class MOCameraScroll : MOCameraMovement
     {
         Vector3 zoomPosition;
-        
+        Vector3 newScrolledPosition;
+
         public void TryToInvokeScrollMovement(Vector3 pointerPos)
         {
             zoomPosition = PointerEdgePositionToScrollDirection(pointerPos);
@@ -19,10 +20,9 @@ namespace Code_MapOfOrders.Logic
             Debug.Log("[MOCameraMovement] Scroll");
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = zoomPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
-            var newPos = currentPos + desiredPosChange;
-            thisTransform
-                .DOLocalMove(newPos, tweenSetup.tweenSettings.tweenTime)
-                .SetEase(tweenSetup.tweenSettings.easeType);
+            newScrolledPosition = currentPos + desiredPosChange;
+            tweenTargetPos = newScrolledPosition;
+            PlayTween();
         }
 
         float RescaleViewportMinMaxCoordinate(float oldVal, float newMin, float newMax)

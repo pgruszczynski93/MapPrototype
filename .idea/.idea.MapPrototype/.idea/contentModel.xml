@@ -9,8 +9,13 @@
         <e p="Code_MapOfOrders" t="Include">
           <e p="Logic" t="Include">
             <e p="ISelectableHouse.cs" t="Include" />
+            <e p="MOCameraBehaviour.cs" t="Include" />
+            <e p="MOCameraDrag.cs" t="Include" />
             <e p="MOCameraMovement.cs" t="Include" />
             <e p="MOCameraMovementArea.cs" t="Include" />
+            <e p="MOCameraMovementLimiter.cs" t="Include" />
+            <e p="MOCameraScroll.cs" t="Include" />
+            <e p="MOCameraZoom.cs" t="Include" />
             <e p="MOConsts.cs" t="Include" />
             <e p="MOEnums.cs" t="Include" />
             <e p="MOEvents.cs" t="Include" />
@@ -27,6 +32,7 @@
             <e p="MOMouseInputSetup.cs" t="Include" />
             <e p="MOOrderHouseInfo.cs" t="Include" />
             <e p="MOSettings.cs" t="Include" />
+            <e p="TweenSetup.cs" t="Include" />
           </e>
         </e>
         <e p="Packages" t="Include">

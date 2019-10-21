@@ -1,11 +1,10 @@
 using Code_MapOfOrders.Logic;
+using DG.Tweening;
 using HGTV.MapsOfOrders;
 using UnityEngine;
 
-namespace DefaultNamespace
-{
-    public class MOCameraBehaviour : MonoBehaviour
-    {
+namespace DefaultNamespace {
+    public class MOCameraBehaviour : MonoBehaviour {
         bool isZooming;
         bool isZoomLimitReached;
         bool isSelected;
@@ -20,72 +19,64 @@ namespace DefaultNamespace
 
         [SerializeField] MOCameraDrag cameraDrag;
         [SerializeField] MOCameraZoom cameraZoom;
+
         [SerializeField] MOCameraScroll cameraScroll;
 //        [SerializeField] protected MOHouseSelector houseSelector;
 
         MOMouseInputData mouseInputData;
 
-        void Initialise()
-        {
+        void Initialise() {
             cameraDrag.SetupMovement(cameraSetup, mapOrderCamera);
             cameraScroll.SetupMovement(cameraSetup, mapOrderCamera);
 //            cameraZoom.SetupMovement(cameraSetup, mapOrderCamera);
         }
 
-        void Start()
-        {
+        void Start() {
             Initialise();
         }
-        
-        void OnEnable()
-        {
+
+        void OnEnable() {
             AssignEvents();
         }
 
-        void OnDisable()
-        {
+        void OnDisable() {
             RemoveEvents();
         }
 
-        void AssignEvents()
-        {
+        void AssignEvents() {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate += HandleMouseMovementActions;
         }
 
-        void RemoveEvents()
-        {
+        void RemoveEvents() {
             MOEvents.OnMouseInputCollected -= HandleMouseInputCollectedReceived;
             MOEvents.OnLateUpdate -= HandleMouseMovementActions;
         }
-        
-        void HandleMouseInputCollectedReceived(MOMouseInputData inputData)
-        {
+
+        void HandleMouseInputCollectedReceived(MOMouseInputData inputData) {
             mouseInputData = inputData;
         }
 
-        void HandleMouseMovementActions()
-        {
-            switch (mouseInputData.mouseAction)
-            {
+        void HandleMouseMovementActions() {
+            switch (mouseInputData.mouseAction) {
                 case MouseAction.Undefined:
+//                    mapOrderCamera.transform.DOPause();
                     //ResetSelectingPossibility();
                     break;
                 case MouseAction.MapSelection:
                     //TryToSelect();
                     break;
                 case MouseAction.MapDragMovement:
+                    cameraScroll.PauseTween();
                     cameraDrag.TryToInvokeDragMovement(mouseInputData.pointerActionPosition);
                     break;
                 case MouseAction.MapScrollMovement:
+                    cameraDrag.PauseTween();
                     cameraScroll.TryToInvokeScrollMovement(mouseInputData.pointerActionPosition);
-                    break;
-                default:
                     break;
             }
 
-            if (isZooming == false)
-            {
+            if (isZooming == false) {
 //                TryToZoomMap();
             }
 

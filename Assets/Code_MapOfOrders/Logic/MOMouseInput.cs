@@ -78,8 +78,6 @@ namespace Code_MapOfOrders.Logic
             
             inputData.pointerActionPosition = mousePosition;
             inputData.mouseAction = MouseAction.MapSelection;
-           
-
         }
 
         void TryToSetScrollInput()

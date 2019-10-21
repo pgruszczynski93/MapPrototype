@@ -19,7 +19,7 @@ namespace Code_MapOfOrders.Logic
 
         protected override void UpdatePosition()
         {
-            
+
         }
     }
 }
