@@ -21,8 +21,7 @@ namespace Code_MapOfOrders.Logic
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = zoomPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
             newScrolledPosition = currentPos + desiredPosChange;
-            tweenTargetPos = newScrolledPosition;
-            PlayTween();
+            PlayTween(newScrolledPosition);
         }
 
         float RescaleViewportMinMaxCoordinate(float oldVal, float newMin, float newMax)

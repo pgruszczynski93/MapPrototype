@@ -17,8 +17,7 @@ namespace Code_MapOfOrders.Logic {
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = dragPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
             newDragPosition = currentPos + desiredPosChange;
-            tweenTargetPos = newDragPosition;
-            PlayTween();
+            PlayTween(newDragPosition);
         }
     }
 }

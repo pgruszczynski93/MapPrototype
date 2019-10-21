@@ -15,4 +15,4 @@ MonoBehaviour:
   tweenSettings:
     easeType: 6
     tweenTime: 0.2
-    positionDeltaMultiplier: 40
+    positionDeltaMultiplier: 240

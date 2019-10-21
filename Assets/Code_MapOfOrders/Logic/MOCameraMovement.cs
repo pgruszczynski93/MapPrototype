@@ -9,25 +9,24 @@ namespace Code_MapOfOrders.Logic {
         protected MOCameraSettings cameraSettings;
         protected Camera thisCamera;
         protected Transform thisTransform;
-        protected Vector3 tweenTargetPos;
         protected Tweener tweener;
 
         bool initialised;
 
         protected abstract void UpdatePosition();
 
-        void Start() {
-            Initialise();
-        }
-
         protected virtual void Initialise() {
             if (initialised)
                 return;
 
             initialised = true;
+            tweener = thisTransform
+                .DOLocalMove(thisTransform.localPosition, tweenSetup.tweenSettings.tweenTime)
+                .SetAutoKill(false)
+                .SetEase(tweenSetup.tweenSettings.easeType);
         }
 
-        protected void PlayTween() {
+        protected void PlayTween(Vector3 tweenTargetPos) {
             tweener.ChangeEndValue(tweenTargetPos, true)
                  .Restart();
         }
@@ -44,10 +43,7 @@ namespace Code_MapOfOrders.Logic {
             thisCamera.fieldOfView = cameraSettings.cameraFov;
             thisTransform.localPosition = cameraSettings.cameraMapSpawnPosition;
             thisTransform.localRotation = Quaternion.Euler(cameraSettings.cameraLookAtAngle);
-            tweener = thisTransform
-                .DOLocalMove(thisTransform.localPosition, tweenSetup.tweenSettings.tweenTime)
-                .SetAutoKill(false)
-                .SetEase(tweenSetup.tweenSettings.easeType);
+            Initialise();
         }
     }
 }
