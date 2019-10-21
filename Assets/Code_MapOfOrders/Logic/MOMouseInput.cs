@@ -62,8 +62,8 @@ namespace Code_MapOfOrders.Logic
                 return;
 
             mousePosition = Input.mousePosition;
-
             inputData.pointerPosition = mousePosition;
+            inputData.scrollValue = (int)Input.mouseScrollDelta.y;
             
             TryToSetSelectInput();
             TryToSetScrollInput();
@@ -85,7 +85,6 @@ namespace Code_MapOfOrders.Logic
             if (!CanCollectMapScrollMovementInput())
                 return;
 
-            inputData.scrollValue = (int)Input.mouseScrollDelta.y;
 
             mouseMovementDelta = mainCamera.ScreenToViewportPoint(mousePosition - lastMousePointerPosition);
 

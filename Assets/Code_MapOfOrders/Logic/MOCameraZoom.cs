@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Xml.Linq;
-using DG.Tweening;
-using HGTV.MapsOfOrders;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
 
 namespace Code_MapOfOrders.Logic {
     public class MOCameraZoom : MOCameraMovement {
