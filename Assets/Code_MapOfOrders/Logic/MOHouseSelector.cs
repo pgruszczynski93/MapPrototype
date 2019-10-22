@@ -1,45 +1,73 @@
-﻿using HGTV.MapsOfOrders;
+﻿using System.Collections.Generic;
+using HGTV.MapsOfOrders;
 using UnityEngine;
 
 namespace Code_MapOfOrders.Logic {
     public class MOHouseSelector : MonoBehaviour {
 
-        MOMapOrderHouse lastHouse;
+        const string HOUSE_TAG = "TestSelection";
+        
+        [SerializeField] MOMapOrderHouse[] mapOfOrdersHouses;
+
+        bool initialised;
+
+        Camera mapOrderCamera;
         Ray selectionRay;
-        public void Show(Ray ray) {
-            selectionRay = ray;
-            TryToFetchObjectData();
+        MOMapOrderHouse selectedHouse;
+        Dictionary<Transform, MOMapOrderHouse> housesCache;
+
+        void Initialise() {
+            if (initialised)
+                return;
+
+            initialised = true;
+            TryToInitialiseHousesCache();
         }
 
-        void TryToFetchObjectData() {
-            RaycastHit hitInfo;
-
-            if (Physics.Raycast(selectionRay, out hitInfo)) {
-                if (hitInfo.collider.CompareTag("TestSelection")) {
-                    hitInfo.collider.gameObject.GetComponent<MOMapOrderHouse>().ShowSelectedHouseInfo();
-                    hitInfo.collider.gameObject.GetComponent<MOMapOrderHouse>().ChangeHighlightMaterial(HouseAction.Selected);
-                }
+        void TryToInitialiseHousesCache() {
+            if (mapOfOrdersHouses.Length == 0 || mapOfOrdersHouses == null) {
+                Debug.LogError("No selectable houses assigned.");
+                return;
+            }
+            
+            housesCache = new Dictionary<Transform, MOMapOrderHouse>();
+            for (var i = 0; i < mapOfOrdersHouses.Length; i++) {
+                var currentHouse = mapOfOrdersHouses[i];
+                housesCache.Add(currentHouse.transform, currentHouse);
             }
         }
+        
+        void Start() {
+            Initialise();
+        }
 
-        public void TryToHighlightObject(Ray ray) {
+        public void SetupHouseSelector(Camera cam) {
+            mapOrderCamera = cam;
+        }
+
+        public void TryToHighlightObject(Vector3 pointerPos, bool isTryingToSelect) {
+            selectionRay = mapOrderCamera.ScreenPointToRay(pointerPos);
             RaycastHit hitInfo;
 
-            Debug.Log("TryToHighlightObject ");
-            selectionRay = ray;
-            if (Physics.Raycast(selectionRay, out hitInfo)) {
-                if (hitInfo.collider.CompareTag("TestSelection")) {
-                    Debug.Log("Highlight");
-                    lastHouse = hitInfo.collider.gameObject.GetComponent<MOMapOrderHouse>();
-                    lastHouse.ChangeHighlightMaterial(HouseAction.Highlighted);
+            if (!Physics.Raycast(selectionRay, out hitInfo)) 
+                return;
+            
+            if (hitInfo.collider.CompareTag(HOUSE_TAG)) {
+                selectedHouse = housesCache[hitInfo.transform];
+                if (isTryingToSelect) {
+                    selectedHouse.ChangeHighlightMaterial(HouseAction.Selected);
+                    selectedHouse.ShowSelectedHouseInfo();
                 }
+
                 else {
-                    Debug.Log("Reset");
-                    if (lastHouse == null)
-                        return;
-                    
-                    lastHouse.ChangeHighlightMaterial(HouseAction.Undefined);
+                    selectedHouse.ChangeHighlightMaterial(HouseAction.Highlighted);
                 }
+            }
+            else {
+                if (selectedHouse == null)
+                    return;
+                    
+                selectedHouse.ChangeHighlightMaterial(HouseAction.Undefined);
             }
         }
         

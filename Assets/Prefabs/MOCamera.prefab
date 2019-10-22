@@ -122,6 +122,7 @@ MonoBehaviour:
   cameraDrag: {fileID: 3682419639555937850}
   cameraScroll: {fileID: 5623816698090408495}
   cameraZoom: {fileID: 8075847063767975852}
+  houseSelector: {fileID: 4233181019628937684}
 --- !u!114 &3682419639555937850
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,8 +5,6 @@ using UnityEngine;
 
 namespace DefaultNamespace {
     public class MOCameraBehaviour : MonoBehaviour {
-        
-        bool isZoomLimitReached;
         bool isSelected;
         bool initialised;
 
@@ -16,15 +14,16 @@ namespace DefaultNamespace {
         [SerializeField] MOCameraDrag cameraDrag;
         [SerializeField] MOCameraScroll cameraScroll;
         [SerializeField] MOCameraZoom cameraZoom;
-//        [SerializeField] protected MOHouseSelector houseSelector;
+        [SerializeField] MOHouseSelector houseSelector;
 
-        MOMouseInputData mouseInputData;
+        MOMouseInputData inputData;
 
         void Initialise() {
             DOTween.Init();
             cameraDrag.SetupMovement(cameraSetup, mapOrderCamera);
             cameraScroll.SetupMovement(cameraSetup, mapOrderCamera);
             cameraZoom.SetupMovement(cameraSetup, mapOrderCamera);
+            houseSelector.SetupHouseSelector(mapOrderCamera);
         }
 
         void Start() {
@@ -49,45 +48,29 @@ namespace DefaultNamespace {
             MOEvents.OnLateUpdate -= HandleMouseMovementActions;
         }
 
-        void HandleMouseInputCollectedReceived(MOMouseInputData inputData) {
-            mouseInputData = inputData;
+        void HandleMouseInputCollectedReceived(MOMouseInputData mouseInputData) {
+            this.inputData = mouseInputData;
         }
 
         void HandleMouseMovementActions() {
-            switch (mouseInputData.mouseAction) {
+            switch (inputData.mouseAction) {
                 case MouseAction.Undefined:
-                    //ResetSelectingPossibility();
+                    houseSelector.TryToHighlightObject(inputData.pointerPosition, false);
                     break;
                 case MouseAction.MapSelection:
-                    //TryToSelect();
+                    houseSelector.TryToHighlightObject(inputData.pointerPosition, true);
                     break;
                 case MouseAction.MapDragMovement:
                     cameraScroll.PauseTween();
-                    cameraDrag.TryToInvokeDragMovement(mouseInputData.pointerActionPosition);
+                    cameraDrag.TryToInvokeDragMovement(inputData.pointerActionPosition);
                     break;
                 case MouseAction.MapScrollMovement:
                     cameraDrag.PauseTween();
-                    cameraScroll.TryToInvokeScrollMovement(mouseInputData.pointerActionPosition);
+//                    cameraScroll.TryToInvokeScrollMovement(mouseInputData.pointerActionPosition);
                     break;
             }
-            cameraZoom.TryToInvokeZoomMovement(mouseInputData.scrollValue);
-        }
 
-//        void ResetSelectingPossibility()
-//        {
-//            isSelected = false;
-//
-//            houseSelector.TryToHighlightObject(thisCamera.ScreenPointToRay(mouseInputData.pointerPosition));
-//        }
-//
-//        void TryToSelect()
-//        {
-//            if (isSelected)
-//                return;
-//            Debug.Log("[MOCameraMovement] Select");
-//            isSelected = true;
-//            houseSelector.Show(thisCamera.ScreenPointToRay(mouseInputData.pointerActionPosition));
-//        }
-//
+            cameraZoom.TryToInvokeZoomMovement(inputData.scrollValue);
+        }
     }
 }

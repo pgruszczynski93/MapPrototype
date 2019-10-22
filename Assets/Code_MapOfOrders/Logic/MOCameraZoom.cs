@@ -6,7 +6,6 @@ namespace Code_MapOfOrders.Logic {
         public static event Action<float, float> OnMinMaxZoomCalculated;
 
         bool isZoomLimitReached;
-//        bool isScrolling;
         int scrollDeltaValue;
         float minZoom;
         float maxZoom;
@@ -17,7 +16,7 @@ namespace Code_MapOfOrders.Logic {
         public void TryToInvokeZoomMovement(int scrollValue) {
             scrollDeltaValue = scrollValue;
 
-            if (scrollDeltaValue == 0 /*|| isScrolling*/)
+            if (scrollDeltaValue == 0)
                 return;
 
             UpdatePosition();
@@ -47,20 +46,16 @@ namespace Code_MapOfOrders.Logic {
                 if (isZoomLimitReached)
                     return;
 
-//                isScrolling = true;
                 isZoomLimitReached = true;
                 var yLimit = Mathf.Clamp(positionAfterScroll.y, minZoom, maxZoom);
                 var clampedPositionAfterScroll =
                     new Vector3(positionAfterScroll.x, yLimit, positionAfterScroll.z);
 
-                PlayTween(clampedPositionAfterScroll, null, () => { /*isScrolling = false;*/ });
+                PlayTween(clampedPositionAfterScroll);
             }
             else {
-//                isScrolling = true;
                 isZoomLimitReached = false;
-                PlayTween(positionAfterScroll,
-                    null,
-                    () => { /*isScrolling = false; */});
+                PlayTween(positionAfterScroll);
             }
         }
 

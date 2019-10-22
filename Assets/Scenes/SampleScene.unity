@@ -1020,5 +1020,35 @@ PrefabInstance:
       propertyPath: bottomBorder
       value: 
       objectReference: {fileID: 569613938}
+    - target: {fileID: 4233181019628937684, guid: f5845ac81edba8347a42bae6a0d70706,
+        type: 3}
+      propertyPath: mapOfOrdersHouses.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233181019628937684, guid: f5845ac81edba8347a42bae6a0d70706,
+        type: 3}
+      propertyPath: mapOfOrdersHouses.Array.data[0]
+      value: 
+      objectReference: {fileID: 1095247970}
+    - target: {fileID: 4233181019628937684, guid: f5845ac81edba8347a42bae6a0d70706,
+        type: 3}
+      propertyPath: mapOfOrdersHouses.Array.data[1]
+      value: 
+      objectReference: {fileID: 1742031464}
+    - target: {fileID: 4233181019628937684, guid: f5845ac81edba8347a42bae6a0d70706,
+        type: 3}
+      propertyPath: mapOfOrdersHouses.Array.data[2]
+      value: 
+      objectReference: {fileID: 287569088}
+    - target: {fileID: 4233181019628937684, guid: f5845ac81edba8347a42bae6a0d70706,
+        type: 3}
+      propertyPath: mapOfOrdersHouses.Array.data[3]
+      value: 
+      objectReference: {fileID: 81572277}
+    - target: {fileID: 4233181019628937684, guid: f5845ac81edba8347a42bae6a0d70706,
+        type: 3}
+      propertyPath: mapOfOrdersHouses.Array.data[4]
+      value: 
+      objectReference: {fileID: 1384684457}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5845ac81edba8347a42bae6a0d70706, type: 3}

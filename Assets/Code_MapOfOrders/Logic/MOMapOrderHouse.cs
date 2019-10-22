@@ -5,6 +5,7 @@ using HGTV.MapsOfOrders;
 using UnityEngine;
 
 public class MOMapOrderHouse : MonoBehaviour, ISelectableHouse {
+    
     [SerializeField] MOOrderHouseInfo info;
     [SerializeField] Material highlightMat;
     [SerializeField] Material selectionMat;
@@ -32,7 +33,7 @@ public class MOMapOrderHouse : MonoBehaviour, ISelectableHouse {
 
     void SwitchMaterials(Material toChange) {
         var newMats = renderer.materials;
-        for(int i=0; i<newMats.Length; i++) {
+        for(var i=0; i<newMats.Length; i++) {
             newMats[i] = toChange;
         }
 
