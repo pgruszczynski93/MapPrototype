@@ -6,7 +6,6 @@ namespace DefaultNamespace {
         public static event Action OnMapStarted;
         public static event Action OnUpdate;
         public static event Action OnLateUpdate;
-
         public static event Action<MOMouseInputData> OnMouseInputCollected;
 
 

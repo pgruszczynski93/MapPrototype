@@ -6,9 +6,9 @@ namespace HGTV.MapsOfOrders {
         MapScrollMovement
     }
 
-    public enum HouseAction {
-        NotSelected,
-        Highlighted,
-        Selected
+    public enum SelectionType {
+        Undefined,
+        Highlight,
+        Selection
     }
 }

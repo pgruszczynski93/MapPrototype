@@ -7,7 +7,7 @@ namespace Code_MapOfOrders.Logic {
         const string HOUSE_TAG = "TestSelection";
 
         [SerializeField] MOMapOrderHouse[] mapOfOrdersHouses;
-        [SerializeField] MOMapOrderHouse pointedHouse;
+        [SerializeField] MOMapOrderHouse highlightedHouse;
         [SerializeField] MOMapOrderHouse selectedHouse;
 
         bool initialised;
@@ -15,17 +15,6 @@ namespace Code_MapOfOrders.Logic {
         Ray selectionRay;
 
         Dictionary<Transform, MOMapOrderHouse> housesCache;
-
-        void Debug_ShowHousesState() {
-            foreach (var h in mapOfOrdersHouses) {
-                Debug.Log(h.name + " " + h.houseState);
-            }
-        }
-
-//        void Update() {
-//            Debug_ShowHousesState();
-//        }
-
         void Initialise() {
             if (initialised)
                 return;
@@ -54,57 +43,67 @@ namespace Code_MapOfOrders.Logic {
         public void SetupHouseSelector(Camera cam) {
             mapOrderCamera = cam;
         }
-
-        public void TryToHighlightHouse(Vector3 pointerPos) {
-
-//            if (selectedHouse) {
-//                selectedHouse.ManageSelectedHouse(HouseAction.Selected);
-//            }
-            
+        
+        public void TryToSelectObject(Vector3 pointerPos, SelectionType selectionType) {
             selectionRay = mapOrderCamera.ScreenPointToRay(pointerPos);
-            RaycastHit hitInfo;
 
-            if (!Physics.Raycast(selectionRay, out hitInfo))
+            if (!Physics.Raycast(selectionRay, out var hitInfo))
                 return;
-
 
             if (hitInfo.collider.CompareTag(HOUSE_TAG)) {
                 var hitTransform = hitInfo.transform;
 
-                if (!housesCache.TryGetValue(hitTransform, out var selection))
+                if (!CanSetCurrentlyHighlightedObject(hitTransform) || highlightedHouse == selectedHouse)
                     return;
 
-                pointedHouse = housesCache[hitTransform];
-
-                if (pointedHouse == selectedHouse)
-                    return;
-                
-                pointedHouse.ManageSelectedHouse(HouseAction.Highlighted);
+                SetStatusOfPointedObject(selectionType);
             }
-            else {
-                if (pointedHouse == null)
-                    return;
-
-                if (pointedHouse == selectedHouse)
-                    return;
-
-                pointedHouse.ManageSelectedHouse(HouseAction.NotSelected);
-                pointedHouse = null;
+            else
+            {
+                TryToResetSelection(selectionType);
             }
         }
 
-        public void TryToFetchHouseInfo() {
-            if (pointedHouse == null)
+        private void TryToResetSelection(SelectionType selectionType)
+        {
+            if (highlightedHouse != null && highlightedHouse != selectedHouse)
+                highlightedHouse.ManageSelectedHouse(SelectionType.Undefined);
+
+            if (selectionType != SelectionType.Selection || selectedHouse == null)
                 return;
-            
-            if (pointedHouse != selectedHouse) {
-                if (selectedHouse != null) {
-                    selectedHouse.isSelected = false;
-                    selectedHouse.ManageSelectedHouse(HouseAction.NotSelected);
-                }
-                selectedHouse = pointedHouse;
-                selectedHouse.ManageSelectedHouse(HouseAction.Selected);
+
+            selectedHouse.ManageSelectedHouse(SelectionType.Undefined);
+            highlightedHouse = null;
+            selectedHouse = null;
+        }
+
+        private void SetStatusOfPointedObject(SelectionType selectionType)
+        {
+            if (selectionType == SelectionType.Selection)
+                TryToSetSelectedObject();
+            else
+                highlightedHouse.ManageSelectedHouse(SelectionType.Highlight);
+        }
+
+        private void TryToSetSelectedObject()
+        {
+            if (selectedHouse != null)
+            {
+                selectedHouse.IsSelcted = false;
+                selectedHouse.ManageSelectedHouse(SelectionType.Undefined);
             }
+
+            selectedHouse = highlightedHouse;
+            selectedHouse.ManageSelectedHouse(SelectionType.Selection);
+        }
+        
+        bool CanSetCurrentlyHighlightedObject(Transform dictKey)
+        {
+            if (!housesCache.TryGetValue(dictKey, out var selectedObj))
+                return false;
+
+            highlightedHouse = housesCache[dictKey];
+            return true;
         }
     }
 }

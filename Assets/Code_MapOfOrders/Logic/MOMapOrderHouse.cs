@@ -12,51 +12,31 @@ public class MOMapOrderHouse : MonoBehaviour {
     [SerializeField] Material normalMaterial;
     [SerializeField] MeshRenderer renderer;
 
-    public bool isSelected;
-    public HouseAction houseState;
+    [SerializeField] bool isSelected;
+    [SerializeField] SelectionType selectionType;
 
+    public bool IsSelcted
+    {
+        set => isSelected = value;
+    }
     void Initialise() {
-        houseState = HouseAction.NotSelected;
-    }
-
-    void OnEnable() {
-        AssignEvents();
-    }
-
-    void OnDisable() {
-        RemoveEvents();
-    }
-
-    void AssignEvents() {
-        MOEvents.OnUpdate += UpdateMaterials;
-    }
-
-    void RemoveEvents() {
-        MOEvents.OnUpdate -= UpdateMaterials;
+        selectionType = SelectionType.Undefined;
     }
 
     void Start() {
         Initialise();
     }
+    public void ManageSelectedHouse(SelectionType state) {
+        selectionType = state;
 
-    void UpdateMaterials() {
-        if (!isSelected)
-            return;
-
-        SwitchMaterials(selectionMat);
-    }
-
-    public void ManageSelectedHouse(HouseAction state) {
-        houseState = state;
-
-        switch (houseState) {
-            case HouseAction.NotSelected:
+        switch (selectionType) {
+            case SelectionType.Undefined:
                 SwitchMaterials(normalMaterial);
                 break;
-            case HouseAction.Highlighted:
+            case SelectionType.Highlight:
                 SwitchMaterials(highlightMat);
                 break;
-            case HouseAction.Selected:
+            case SelectionType.Selection:
                 TryToSelectHouse();
                 break;
             default:
@@ -81,7 +61,6 @@ public class MOMapOrderHouse : MonoBehaviour {
         for (var i = 0; i < newMats.Length; i++) {
             newMats[i] = toChange;
         }
-
         renderer.materials = newMats;
     }
 }

@@ -55,10 +55,10 @@ namespace DefaultNamespace {
         void HandleMouseMovementActions() {
             switch (inputData.mouseAction) {
                 case MouseAction.Undefined:
-                    houseSelector.TryToHighlightHouse(inputData.pointerPosition);
+                    houseSelector.TryToSelectObject(inputData.pointerPosition, SelectionType.Highlight);
                     break;
                 case MouseAction.MapSelection:
-                    houseSelector.TryToFetchHouseInfo();
+                    houseSelector.TryToSelectObject(inputData.pointerPosition, SelectionType.Selection);
                     break;
                 case MouseAction.MapDragMovement:
                     cameraScroll.PauseTween();
