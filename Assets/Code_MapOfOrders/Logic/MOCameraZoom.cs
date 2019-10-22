@@ -6,22 +6,18 @@ namespace Code_MapOfOrders.Logic {
         public static event Action<float, float> OnMinMaxZoomCalculated;
 
         bool isZoomLimitReached;
+        bool isScrolling;
         int scrollDeltaValue;
         float minZoom;
         float maxZoom;
-        float currentZoom;
 
-        public float CurrentZoomStep {
-            get {
-                Debug.Log((currentZoom - minZoom) / tweenSetup.tweenSettings.positionDeltaMultiplier + 1);
-                return (currentZoom - minZoom) / tweenSetup.tweenSettings.positionDeltaMultiplier + 1;
-            }
-        }
+        public int CurrentHeightStep =>
+            Mathf.RoundToInt(thisTransform.localPosition.y / tweenSetup.tweenSettings.positionDeltaMultiplier);
 
         public void TryToInvokeZoomMovement(int scrollValue) {
             scrollDeltaValue = scrollValue;
 
-            if (scrollDeltaValue == 0)
+            if (scrollDeltaValue == 0 || isScrolling)
                 return;
 
             UpdatePosition();
@@ -35,7 +31,6 @@ namespace Code_MapOfOrders.Logic {
             base.Initialise();
             var localPosition = thisTransform.localPosition;
             var startHeight = localPosition.y;
-            currentZoom = startHeight;
             minZoom = startHeight - cameraSettings.maxZoomValue;
             maxZoom = startHeight + cameraSettings.maxZoomValue;
             BroadcastOnMinMaxZoomCalculated(minZoom, maxZoom);
@@ -45,8 +40,6 @@ namespace Code_MapOfOrders.Logic {
             var zoomSign = Mathf.Sign(scrollDeltaValue);
             var zoomDelta = tweenSetup.tweenSettings.positionDeltaMultiplier * scrollDeltaValue;
             var currentPos = thisTransform.localPosition;
-            
-            Debug.Log("zd " +zoomDelta);
 
             var positionAfterScroll = currentPos + zoomDelta * thisTransform.forward;
 
@@ -54,18 +47,20 @@ namespace Code_MapOfOrders.Logic {
                 if (isZoomLimitReached)
                     return;
 
+                isScrolling = true;
+                isZoomLimitReached = true;
                 var yLimit = Mathf.Clamp(positionAfterScroll.y, minZoom, maxZoom);
                 var clampedPositionAfterScroll =
                     new Vector3(positionAfterScroll.x, yLimit, positionAfterScroll.z);
 
-                PlayTween(clampedPositionAfterScroll);
-
-                isZoomLimitReached = true;
+                PlayTween(clampedPositionAfterScroll, null, () => { isScrolling = false; });
             }
             else {
-                PlayTween(positionAfterScroll,
-                    () => { currentZoom = Mathf.Clamp(currentZoom - zoomDelta, minZoom, maxZoom); });
+                isScrolling = true;
                 isZoomLimitReached = false;
+                PlayTween(positionAfterScroll,
+                    null,
+                    () => { isScrolling = false; });
             }
         }
 

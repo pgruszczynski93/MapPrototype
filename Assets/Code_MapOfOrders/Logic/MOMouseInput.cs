@@ -64,7 +64,7 @@ namespace Code_MapOfOrders.Logic
             mousePosition = Input.mousePosition;
             inputData.pointerPosition = mousePosition;
             inputData.scrollValue = (int)Input.mouseScrollDelta.y;
-            
+
             TryToSetSelectInput();
             TryToSetScrollInput();
             TryToSetDragInput();

@@ -28,8 +28,11 @@ namespace Code_MapOfOrders.Logic {
                 .Pause();
         }
 
-        protected void PlayTween(Vector3 tweenTargetPos, Action onTweenComplete = null) {
+        protected void PlayTween(Vector3 tweenTargetPos, Action onTweenRewind = null, Action onTweenComplete = null) {
             tweener.ChangeEndValue(tweenTargetPos, true)
+                .OnRewind(() => {
+                    onTweenRewind?.Invoke();
+                })
                 .OnComplete(() => {
                     onTweenComplete?.Invoke();
                 })

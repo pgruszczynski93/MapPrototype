@@ -17,10 +17,8 @@ namespace Code_MapOfOrders.Logic {
 
         protected override void UpdatePosition() {
             var currentPos = thisTransform.localPosition;
-//            Debug.Log("XD "+(cameraZoom.CurrentZoomStep
-//                             * tweenSetup.tweenSettings.positionDeltaMultiplier));
             var desiredPosChange = dragPosition
-                                   * cameraZoom.CurrentZoomStep
+                                   * cameraZoom.CurrentHeightStep
                                    * tweenSetup.tweenSettings.positionDeltaMultiplier ;
             newDragPosition = currentPos + desiredPosChange;
             PlayTween(newDragPosition);
