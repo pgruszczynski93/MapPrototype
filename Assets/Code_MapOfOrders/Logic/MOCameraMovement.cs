@@ -30,6 +30,9 @@ namespace Code_MapOfOrders.Logic {
 
         protected void PlayTween(Vector3 tweenTargetPos, Action onTweenComplete = null) {
             tweener.ChangeEndValue(tweenTargetPos, true)
+                .OnComplete(() => {
+                    onTweenComplete?.Invoke();
+                })
                 .Restart();
         }
 
