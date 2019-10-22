@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using DefaultNamespace;
 using HGTV.MapsOfOrders;
 using UnityEngine;
 
-namespace Code_MapOfOrders.Logic {
-    public class MOHouseSelector : MonoBehaviour {
+namespace Code_MapOfOrders.Logic
+{
+    public class MOHouseSelector : MonoBehaviour
+    {
         const string HOUSE_TAG = "TestSelection";
 
         [SerializeField] MOMapOrderHouse[] mapOfOrdersHouses;
@@ -15,7 +18,9 @@ namespace Code_MapOfOrders.Logic {
         Ray selectionRay;
 
         Dictionary<Transform, MOMapOrderHouse> housesCache;
-        void Initialise() {
+
+        void Initialise()
+        {
             if (initialised)
                 return;
 
@@ -23,66 +28,92 @@ namespace Code_MapOfOrders.Logic {
             TryToInitialiseHousesCache();
         }
 
-        void TryToInitialiseHousesCache() {
-            if (mapOfOrdersHouses.Length == 0 || mapOfOrdersHouses == null) {
+        void OnEnable()
+        {
+            AssignEvents();
+        }
+
+        void OnDisable()
+        {
+            RemoveEvents();
+        }
+
+        void AssignEvents()
+        {
+            MOEvents.OnSelect += TryToSelectObject;
+        }
+        void RemoveEvents()
+        {
+            MOEvents.OnSelect -= TryToSelectObject;
+        }
+
+        void TryToInitialiseHousesCache()
+        {
+            if (mapOfOrdersHouses.Length == 0 || mapOfOrdersHouses == null)
+            {
                 Debug.LogError("No selectable houses assigned.");
                 return;
             }
 
             housesCache = new Dictionary<Transform, MOMapOrderHouse>();
-            for (var i = 0; i < mapOfOrdersHouses.Length; i++) {
+            for (var i = 0; i < mapOfOrdersHouses.Length; i++)
+            {
                 var currentHouse = mapOfOrdersHouses[i];
                 housesCache.Add(currentHouse.transform, currentHouse);
             }
         }
 
-        void Start() {
+        void Start()
+        {
             Initialise();
         }
 
-        public void SetupHouseSelector(Camera cam) {
+        public void SetupHouseSelector(Camera cam)
+        {
             mapOrderCamera = cam;
         }
-        
-        public void TryToSelectObject(Vector3 pointerPos, SelectionType selectionType) {
+
+        void TryToSelectObject(Vector3 pointerPos, MapSelectionType mapSelectionType)
+        {
             selectionRay = mapOrderCamera.ScreenPointToRay(pointerPos);
 
             if (!Physics.Raycast(selectionRay, out var hitInfo))
                 return;
 
-            if (hitInfo.collider.CompareTag(HOUSE_TAG)) {
+            if (hitInfo.collider.CompareTag(HOUSE_TAG))
+            {
                 var hitTransform = hitInfo.transform;
 
                 if (!CanSetCurrentlyHighlightedObject(hitTransform) || highlightedHouse == selectedHouse)
                     return;
 
-                SetStatusOfPointedObject(selectionType);
+                SetStatusOfPointedObject(mapSelectionType);
             }
             else
             {
-                TryToResetSelection(selectionType);
+                TryToResetSelection(mapSelectionType);
             }
         }
 
-        private void TryToResetSelection(SelectionType selectionType)
+        private void TryToResetSelection(MapSelectionType mapSelectionType)
         {
             if (highlightedHouse != null && highlightedHouse != selectedHouse)
-                highlightedHouse.ManageSelectedHouse(SelectionType.Undefined);
+                highlightedHouse.ManageSelectedHouse(MapSelectionType.Undefined);
 
-            if (selectionType != SelectionType.Selection || selectedHouse == null)
+            if (mapSelectionType != MapSelectionType.Selection || selectedHouse == null)
                 return;
 
-            selectedHouse.ManageSelectedHouse(SelectionType.Undefined);
+            selectedHouse.ManageSelectedHouse(MapSelectionType.Undefined);
             highlightedHouse = null;
             selectedHouse = null;
         }
 
-        private void SetStatusOfPointedObject(SelectionType selectionType)
+        private void SetStatusOfPointedObject(MapSelectionType mapSelectionType)
         {
-            if (selectionType == SelectionType.Selection)
+            if (mapSelectionType == MapSelectionType.Selection)
                 TryToSetSelectedObject();
             else
-                highlightedHouse.ManageSelectedHouse(SelectionType.Highlight);
+                highlightedHouse.ManageSelectedHouse(MapSelectionType.Highlight);
         }
 
         private void TryToSetSelectedObject()
@@ -90,13 +121,13 @@ namespace Code_MapOfOrders.Logic {
             if (selectedHouse != null)
             {
                 selectedHouse.IsSelcted = false;
-                selectedHouse.ManageSelectedHouse(SelectionType.Undefined);
+                selectedHouse.ManageSelectedHouse(MapSelectionType.Undefined);
             }
 
             selectedHouse = highlightedHouse;
-            selectedHouse.ManageSelectedHouse(SelectionType.Selection);
+            selectedHouse.ManageSelectedHouse(MapSelectionType.Selection);
         }
-        
+
         bool CanSetCurrentlyHighlightedObject(Transform dictKey)
         {
             if (!housesCache.TryGetValue(dictKey, out var selectedObj))

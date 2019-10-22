@@ -13,30 +13,30 @@ public class MOMapOrderHouse : MonoBehaviour {
     [SerializeField] MeshRenderer renderer;
 
     [SerializeField] bool isSelected;
-    [SerializeField] SelectionType selectionType;
+    [SerializeField] MapSelectionType mapSelectionType;
 
     public bool IsSelcted
     {
         set => isSelected = value;
     }
     void Initialise() {
-        selectionType = SelectionType.Undefined;
+        mapSelectionType = MapSelectionType.Undefined;
     }
 
     void Start() {
         Initialise();
     }
-    public void ManageSelectedHouse(SelectionType state) {
-        selectionType = state;
+    public void ManageSelectedHouse(MapSelectionType state) {
+        mapSelectionType = state;
 
-        switch (selectionType) {
-            case SelectionType.Undefined:
+        switch (mapSelectionType) {
+            case MapSelectionType.Undefined:
                 SwitchMaterials(normalMaterial);
                 break;
-            case SelectionType.Highlight:
+            case MapSelectionType.Highlight:
                 SwitchMaterials(highlightMat);
                 break;
-            case SelectionType.Selection:
+            case MapSelectionType.Selection:
                 TryToSelectHouse();
                 break;
             default:

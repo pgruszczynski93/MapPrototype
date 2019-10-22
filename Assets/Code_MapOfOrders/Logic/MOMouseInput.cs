@@ -66,12 +66,6 @@ namespace Code_MapOfOrders.Logic
             TryToBroadcastScroll();
             TryToBroadcastDrag();
             TryToBroadcastZoom();
-            BroadcastPointerPositionUpdate();
-        }
-
-        void BroadcastPointerPositionUpdate()
-        {
-            MOEvents.BroadcastOnPointerPositionUpdate(mousePosition);
         }
 
         void TryToBroadcastZoom()
@@ -85,10 +79,12 @@ namespace Code_MapOfOrders.Logic
 
         void TryToBroadcastSelection()
         {
+            MOEvents.BroadcastOnSelect(mousePosition, MapSelectionType.Highlight);
+
             if (!IsSelectionButtonPressed())
                 return;
 
-            MOEvents.BroadcastOnSelect(mousePosition);
+            MOEvents.BroadcastOnSelect(mousePosition, MapSelectionType.Selection);
         }
 
         void TryToBroadcastScroll()

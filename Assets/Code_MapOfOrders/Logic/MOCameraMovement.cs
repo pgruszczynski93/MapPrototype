@@ -51,7 +51,7 @@ namespace Code_MapOfOrders.Logic {
                 .Restart();
         }
 
-        public void PauseTween() {
+        public void PauseTween(Vector3 pointerPos) {
             tweener.Pause();
         }
 

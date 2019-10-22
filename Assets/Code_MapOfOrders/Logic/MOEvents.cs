@@ -1,5 +1,6 @@
 using System;
 using Code_MapOfOrders.Logic;
+using HGTV.MapsOfOrders;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -9,28 +10,14 @@ namespace DefaultNamespace
         public static event Action OnMapStarted;
         public static event Action OnUpdate;
         public static event Action OnLateUpdate;
-        public static event Action<MOMouseInputData> OnMouseInputCollected;
-        public static event Action<Vector3> OnHighlight;
-
-        public static event Action<Vector3> OnPointerPositionUpdate;
-        public static event Action<Vector3> OnSelect;
+        public static event Action<Vector3, MapSelectionType> OnSelect;
         public static event Action<Vector3> OnDrag;
         public static event Action<Vector3> OnScroll;
         public static event Action<int> OnZoom;
 
-        public static void BroadcastOnPointerPositionUpdate(Vector3 pointerPos)
+        public static void BroadcastOnSelect(Vector3 pointerPos, MapSelectionType selection)
         {
-            OnPointerPositionUpdate?.Invoke(pointerPos);
-        }
-
-        public static void BroadcastOnHighlight(Vector3 pointerPos)
-        {
-            OnHighlight?.Invoke(pointerPos);
-        }
-
-        public static void BroadcastOnSelect(Vector3 pointerPos)
-        {
-            OnSelect?.Invoke(pointerPos);
+            OnSelect?.Invoke(pointerPos, selection);
         }
 
         public static void BroadcastOnDrag(Vector3 pointerPos)
@@ -61,11 +48,6 @@ namespace DefaultNamespace
         public static void BroadcastOnLateUpdate()
         {
             OnLateUpdate?.Invoke();
-        }
-
-        public static void BroadcastOnMouseInput(MOMouseInputData inputData)
-        {
-            OnMouseInputCollected?.Invoke(inputData);
         }
     }
 }

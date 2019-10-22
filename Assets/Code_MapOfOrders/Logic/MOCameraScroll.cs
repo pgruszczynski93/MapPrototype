@@ -12,17 +12,18 @@ namespace Code_MapOfOrders.Logic
         {
             base.AssignEvents();
             MOEvents.OnScroll += UpdatePosition;
+            MOEvents.OnDrag += PauseTween;
         }
 
         protected override void RemoveEvents()
         {
             base.RemoveEvents();
             MOEvents.OnScroll -= UpdatePosition;
+            MOEvents.OnDrag -= PauseTween;
         }
         
         protected override void UpdatePosition(Vector3 pointerPos)
         {
-            Debug.Log("Scroll");
             scaledViewportPosition = PointerEdgePositionToScrollDirection(pointerPos);
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = scaledViewportPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;

@@ -27,7 +27,6 @@ namespace Code_MapOfOrders.Logic {
             Mathf.RoundToInt(thisTransform.localPosition.y / tweenSetup.tweenSettings.positionDeltaMultiplier);
 
         public void TryToInvokeZoomMovement(int scrollValue) {
-            Debug.Log("Zoom");
             scrollDeltaValue = scrollValue;
             UpdatePosition(default);
         }

@@ -15,15 +15,17 @@ namespace Code_MapOfOrders.Logic {
         {
             base.AssignEvents();
             MOEvents.OnDrag += UpdatePosition;
+            MOEvents.OnScroll += PauseTween;
         }
 
         protected override void RemoveEvents()
         {
             base.RemoveEvents();
             MOEvents.OnDrag -= UpdatePosition;
+            MOEvents.OnScroll -= PauseTween;
         }
+        
         protected override void UpdatePosition(Vector3 pointerPos) {
-            Debug.Log("DRAG");
             dragPosition = new Vector3(pointerPos.x, 0, pointerPos.y);               
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = tweenSetup.tweenSettings.positionDeltaMultiplier

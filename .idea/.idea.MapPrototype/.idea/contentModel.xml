@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\range\.Rider2018.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\range\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_MapPrototype.-1065739623.00" t="ExcludeRecursive" />
-    <e p="D:\Prototypes\HGTV_MapOfOrders\MapPrototype" t="IncludeRecursive">
+    <e p="C:\Unity Projects\Prototypes\MapPrototype" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Code_MapOfOrders" t="Include">
@@ -22,7 +20,6 @@
             <e p="MOMapOrderHouse.cs" t="Include" />
             <e p="MOMasterBehaviour.cs" t="Include" />
             <e p="MOMouseInput.cs" t="Include" />
-            <e p="MOMouseInputData.cs" t="Include" />
           </e>
           <e p="ScriptableObjects" t="Include">
             <e p="MOCameraSettings.cs" t="Include" />
@@ -53,11 +50,12 @@
         </e>
       </e>
       <e p="DOTween.Modules.csproj" t="IncludeRecursive" />
-      <e p="Library" t="ExcludeRecursive" />
       <e p="MapPrototype.sln" t="IncludeFlat" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="Packages" t="ExcludeRecursive" />
       <e p="Temp\bin" t="ExcludeRecursive" />
     </e>
+    <e p="C:\Users\range\.Rider2019.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\range\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_MapPrototype.-1525350339.00" t="ExcludeRecursive" />
   </component>
 </project>
