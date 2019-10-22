@@ -7,7 +7,7 @@ namespace HGTV.MapsOfOrders {
     }
 
     public enum HouseAction {
-        Undefined,
+        NotSelected,
         Highlighted,
         Selected
     }

@@ -49,16 +49,16 @@ namespace DefaultNamespace {
         }
 
         void HandleMouseInputCollectedReceived(MOMouseInputData mouseInputData) {
-            this.inputData = mouseInputData;
+            inputData = mouseInputData;
         }
 
         void HandleMouseMovementActions() {
             switch (inputData.mouseAction) {
                 case MouseAction.Undefined:
-                    houseSelector.TryToHighlightObject(inputData.pointerPosition, false);
+                    houseSelector.TryToHighlightHouse(inputData.pointerPosition);
                     break;
                 case MouseAction.MapSelection:
-                    houseSelector.TryToHighlightObject(inputData.pointerPosition, true);
+                    houseSelector.TryToFetchHouseInfo();
                     break;
                 case MouseAction.MapDragMovement:
                     cameraScroll.PauseTween();

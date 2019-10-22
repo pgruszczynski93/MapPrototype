@@ -135,6 +135,7 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 81572280}
+  houseState: 0
 --- !u!65 &81572278
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -246,6 +247,7 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 287569091}
+  houseState: 0
 --- !u!65 &287569089
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -563,6 +565,7 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 1095247973}
+  houseState: 0
 --- !u!65 &1095247971
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -649,6 +652,7 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 1384684460}
+  houseState: 0
 --- !u!65 &1384684458
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -681,7 +685,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_Name
-      value: o_domek
+      value: o_domek_1
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_TagString
@@ -689,7 +693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100042, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_Name
-      value: o_domek
+      value: o_domek_2
       objectReference: {fileID: 0}
     - target: {fileID: 100042, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_TagString
@@ -697,7 +701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100048, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_Name
-      value: o_domek
+      value: o_domek_3
       objectReference: {fileID: 0}
     - target: {fileID: 100048, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_TagString
@@ -705,7 +709,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100058, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_Name
-      value: o_domek
+      value: o_domek_4
       objectReference: {fileID: 0}
     - target: {fileID: 100058, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_TagString
@@ -713,7 +717,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100082, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_Name
-      value: o_domek
+      value: o_domek_5
       objectReference: {fileID: 0}
     - target: {fileID: 100082, guid: 1feb4ec16094de140a20c2506e5a5717, type: 3}
       propertyPath: m_TagString
@@ -828,6 +832,7 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 1742031467}
+  houseState: 0
 --- !u!65 &1742031465
 BoxCollider:
   m_ObjectHideFlags: 0

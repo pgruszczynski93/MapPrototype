@@ -4,17 +4,27 @@ using UnityEngine;
 
 namespace Code_MapOfOrders.Logic {
     public class MOHouseSelector : MonoBehaviour {
-
         const string HOUSE_TAG = "TestSelection";
-        
+
         [SerializeField] MOMapOrderHouse[] mapOfOrdersHouses;
+        [SerializeField] MOMapOrderHouse pointedHouse;
+        [SerializeField] MOMapOrderHouse selectedHouse;
 
         bool initialised;
-
         Camera mapOrderCamera;
         Ray selectionRay;
-        MOMapOrderHouse selectedHouse;
+
         Dictionary<Transform, MOMapOrderHouse> housesCache;
+
+        void Debug_ShowHousesState() {
+            foreach (var h in mapOfOrdersHouses) {
+                Debug.Log(h.name + " " + h.houseState);
+            }
+        }
+
+//        void Update() {
+//            Debug_ShowHousesState();
+//        }
 
         void Initialise() {
             if (initialised)
@@ -29,14 +39,14 @@ namespace Code_MapOfOrders.Logic {
                 Debug.LogError("No selectable houses assigned.");
                 return;
             }
-            
+
             housesCache = new Dictionary<Transform, MOMapOrderHouse>();
             for (var i = 0; i < mapOfOrdersHouses.Length; i++) {
                 var currentHouse = mapOfOrdersHouses[i];
                 housesCache.Add(currentHouse.transform, currentHouse);
             }
         }
-        
+
         void Start() {
             Initialise();
         }
@@ -45,31 +55,45 @@ namespace Code_MapOfOrders.Logic {
             mapOrderCamera = cam;
         }
 
-        public void TryToHighlightObject(Vector3 pointerPos, bool isTryingToSelect) {
+        public void TryToHighlightHouse(Vector3 pointerPos) {
             selectionRay = mapOrderCamera.ScreenPointToRay(pointerPos);
             RaycastHit hitInfo;
 
-            if (!Physics.Raycast(selectionRay, out hitInfo)) 
+            if (!Physics.Raycast(selectionRay, out hitInfo))
                 return;
-            
-            if (hitInfo.collider.CompareTag(HOUSE_TAG)) {
-                selectedHouse = housesCache[hitInfo.transform];
-                if (isTryingToSelect) {
-                    selectedHouse.ChangeHighlightMaterial(HouseAction.Selected);
-                    selectedHouse.ShowSelectedHouseInfo();
-                }
 
-                else {
-                    selectedHouse.ChangeHighlightMaterial(HouseAction.Highlighted);
-                }
+
+            if (hitInfo.collider.CompareTag(HOUSE_TAG)) {
+                var hitTransform = hitInfo.transform;
+
+                if (!housesCache.TryGetValue(hitTransform, out var selection))
+                    return;
+
+                pointedHouse = housesCache[hitTransform];
+
+                if (pointedHouse == selectedHouse)
+                    return;
+                
+                Debug.Log(pointedHouse.name);
+                pointedHouse.ManageSelectedHouse(HouseAction.Highlighted);
             }
             else {
-                if (selectedHouse == null)
+                if (pointedHouse == null)
                     return;
-                    
-                selectedHouse.ChangeHighlightMaterial(HouseAction.Undefined);
+
+                pointedHouse.ManageSelectedHouse(HouseAction.NotSelected);
+                pointedHouse = null;
             }
         }
-        
+
+        public void TryToFetchHouseInfo() {
+            if (pointedHouse == null)
+                return;
+            
+            if (pointedHouse != selectedHouse) {
+                selectedHouse = pointedHouse;
+                selectedHouse.ManageSelectedHouse(HouseAction.Selected);
+            }
+        }
     }
 }

@@ -8,7 +8,6 @@
       <e p="Assets" t="Include">
         <e p="Code_MapOfOrders" t="Include">
           <e p="Logic" t="Include">
-            <e p="ISelectableHouse.cs" t="Include" />
             <e p="MOCameraBehaviour.cs" t="Include" />
             <e p="MOCameraDrag.cs" t="Include" />
             <e p="MOCameraMovement.cs" t="Include" />
