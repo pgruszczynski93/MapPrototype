@@ -11,13 +11,12 @@ namespace Code_MapOfOrders.Logic
 
         [Range(1, 10), SerializeField] float screenBorder;
         [SerializeField] Camera mainCamera;
-        [SerializeField] MOMouseInputData inputData;
 
         bool initialised;
 
         Vector2 mouseMovementDimensions;
         Vector2 mouseMovementBorders;
-        
+
         Vector3 mousePosition;
         Vector3 lastMousePointerPosition;
         Vector3 mouseMovementDelta;
@@ -62,60 +61,45 @@ namespace Code_MapOfOrders.Logic
                 return;
 
             mousePosition = Input.mousePosition;
-            inputData.pointerPosition = mousePosition;
-            inputData.scrollValue = (int)Input.mouseScrollDelta.y;
 
-            TryToSetSelectInput();
-            TryToSetScrollInput();
-            TryToSetDragInput();
-            
-            MOEvents.BroadcastOnMouseInput(inputData);
+            TryToBroadcastSelection();
+            TryToBroadcastScroll();
+            TryToBroadcastDrag();
+            TryToBroadcastZoom();
+            BroadcastPointerPositionUpdate();
         }
 
-        void TryToSetSelectInput() {
-            if (!IsSelectionButtonPressed()) 
-                return;
-            
-            inputData.pointerActionPosition = mousePosition;
-            inputData.mouseAction = MouseAction.MapSelection;
-        }
-
-        void TryToSetScrollInput()
+        void BroadcastPointerPositionUpdate()
         {
-            if (!CanCollectMapScrollMovementInput())
+            MOEvents.BroadcastOnPointerPositionUpdate(mousePosition);
+        }
+
+        void TryToBroadcastZoom()
+        {
+            var scrollDelta = (int) Input.mouseScrollDelta.y;
+            if (scrollDelta == 0)
                 return;
 
-
-            mouseMovementDelta = mainCamera.ScreenToViewportPoint(mousePosition - lastMousePointerPosition);
-
-            RecognizeScreenEdgeAction(()=> {
-                    ResetMouseActions();
-                    inputData.pointerActionPosition = mainCamera.ScreenToViewportPoint(mousePosition);
-
-                },
-                SetScrollMapProperties);
+            MOEvents.BroadcastOnZoom(scrollDelta);
         }
 
-        void ResetMouseActions()
+        void TryToBroadcastSelection()
         {
-            inputData.mouseAction = MouseAction.Undefined;
+            if (!IsSelectionButtonPressed())
+                return;
+
+            MOEvents.BroadcastOnSelect(mousePosition);
         }
 
-        void SetScrollMapProperties()
+        void TryToBroadcastScroll()
         {
-            inputData.mouseAction = MouseAction.MapScrollMovement;
-            inputData.pointerActionPosition = mainCamera.ScreenToViewportPoint(mousePosition);
+            if (!CanCollectMapScrollMovementInput() || IsMouseInScreenCoords())
+                return;
+
+            MOEvents.BroadcastOnScroll(mainCamera.ScreenToViewportPoint(mousePosition));
         }
 
-        void RecognizeScreenEdgeAction(Action onMouseInViewport, Action onMouseOutOfViewport)
-        {
-            if (IsMouseInScreenCoords() && !IsSelectionButtonPressed())
-                onMouseInViewport?.Invoke();
-            else
-                onMouseOutOfViewport?.Invoke();
-        }
-
-        void TryToSetDragInput()
+        void TryToBroadcastDrag()
         {
             if (Input.GetMouseButtonDown(1))
             {
@@ -124,14 +108,10 @@ namespace Code_MapOfOrders.Logic
             }
 
             if (!Input.GetMouseButton(1) || lastMousePointerPosition == mousePosition)
-            {
-                MOEvents.BroadcastOnMouseInput(inputData);
                 return;
-            }
 
-            inputData.mouseAction = MouseAction.MapDragMovement;
             mouseMovementDelta = mainCamera.ScreenToViewportPoint(lastMousePointerPosition - mousePosition);
-            inputData.pointerActionPosition = mouseMovementDelta;
+            MOEvents.BroadcastOnDrag(mouseMovementDelta);
             lastMousePointerPosition = mousePosition;
         }
 
@@ -148,11 +128,13 @@ namespace Code_MapOfOrders.Logic
             return Input.mousePresent;
         }
 
-        bool IsSelectionButtonPressed() {
+        bool IsSelectionButtonPressed()
+        {
             return Input.GetMouseButtonDown(0);
         }
 
-        bool IsSelectionButtonReleased() {
+        bool IsSelectionButtonReleased()
+        {
             return Input.GetMouseButtonUp(1);
         }
 

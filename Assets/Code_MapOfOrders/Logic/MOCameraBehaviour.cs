@@ -40,12 +40,12 @@ namespace DefaultNamespace {
 
         void AssignEvents() {
             MOEvents.OnMouseInputCollected += HandleMouseInputCollectedReceived;
-            MOEvents.OnLateUpdate += HandleMouseMovementActions;
+//            MOEvents.OnLateUpdate += HandleMouseMovementActions;
         }
 
         void RemoveEvents() {
             MOEvents.OnMouseInputCollected -= HandleMouseInputCollectedReceived;
-            MOEvents.OnLateUpdate -= HandleMouseMovementActions;
+//            MOEvents.OnLateUpdate -= HandleMouseMovementActions;
         }
 
         void HandleMouseInputCollectedReceived(MOMouseInputData mouseInputData) {
@@ -62,7 +62,7 @@ namespace DefaultNamespace {
                     break;
                 case MouseAction.MapDragMovement:
                     cameraScroll.PauseTween();
-                    cameraDrag.TryToInvokeDragMovement(inputData.pointerActionPosition);
+//                    cameraDrag.TryToInvokeDragMovement(inputData.pointerActionPosition);
                     break;
                 case MouseAction.MapScrollMovement:
                     cameraDrag.PauseTween();

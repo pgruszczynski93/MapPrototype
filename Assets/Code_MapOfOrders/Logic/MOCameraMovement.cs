@@ -14,7 +14,9 @@ namespace Code_MapOfOrders.Logic {
 
         bool initialised;
 
-        protected abstract void UpdatePosition();
+        protected abstract void UpdatePosition(Vector3 pointerPos);
+        protected virtual void AssignEvents(){}
+        protected virtual void RemoveEvents(){}
 
         protected virtual void Initialise() {
             if (initialised)
@@ -26,6 +28,16 @@ namespace Code_MapOfOrders.Logic {
                 .SetAutoKill(false)
                 .SetEase(tweenSetup.tweenSettings.easeType)
                 .Pause();
+        }
+
+        void OnEnable()
+        {
+            AssignEvents();
+        }
+
+        void OnDisable()
+        {
+            RemoveEvents();
         }
 
         protected void PlayTween(Vector3 tweenTargetPos, Action onTweenRewind = null, Action onTweenComplete = null) {

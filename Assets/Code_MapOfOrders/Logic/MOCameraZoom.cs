@@ -1,4 +1,5 @@
 ﻿using System;
+using DefaultNamespace;
 using UnityEngine;
 
 namespace Code_MapOfOrders.Logic {
@@ -9,17 +10,26 @@ namespace Code_MapOfOrders.Logic {
         int scrollDeltaValue;
         float minZoom;
         float maxZoom;
+        
+        protected override void AssignEvents()
+        {
+            base.AssignEvents();
+            MOEvents.OnZoom += TryToInvokeZoomMovement;
+        }
+
+        protected override void RemoveEvents()
+        {
+            base.RemoveEvents();
+            MOEvents.OnZoom -= TryToInvokeZoomMovement;
+        }
 
         public int CurrentHeightStep =>
             Mathf.RoundToInt(thisTransform.localPosition.y / tweenSetup.tweenSettings.positionDeltaMultiplier);
 
         public void TryToInvokeZoomMovement(int scrollValue) {
+            Debug.Log("Zoom");
             scrollDeltaValue = scrollValue;
-
-            if (scrollDeltaValue == 0)
-                return;
-
-            UpdatePosition();
+            UpdatePosition(default);
         }
 
         public static void BroadcastOnMinMaxZoomCalculated(float minZoom, float maxZoom) {
@@ -35,7 +45,7 @@ namespace Code_MapOfOrders.Logic {
             BroadcastOnMinMaxZoomCalculated(minZoom, maxZoom);
         }
 
-        protected override void UpdatePosition() {
+        protected override void UpdatePosition(Vector3 pointerPos) {
             var zoomSign = Mathf.Sign(scrollDeltaValue);
             var zoomDelta = tweenSetup.tweenSettings.positionDeltaMultiplier * scrollDeltaValue;
             var currentPos = thisTransform.localPosition;

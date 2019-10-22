@@ -1,5 +1,4 @@
-﻿using DG.Tweening;
-using HGTV.MapsOfOrders;
+﻿using DefaultNamespace;
 using UnityEngine;
 
 namespace Code_MapOfOrders.Logic
@@ -8,15 +7,23 @@ namespace Code_MapOfOrders.Logic
     {
         Vector3 scaledViewportPosition;
         Vector3 newScrolledPosition;
-
-        public void TryToInvokeScrollMovement(Vector3 pointerPos)
+        
+        protected override void AssignEvents()
         {
-            scaledViewportPosition = PointerEdgePositionToScrollDirection(pointerPos);
-            UpdatePosition();
+            base.AssignEvents();
+            MOEvents.OnScroll += UpdatePosition;
         }
 
-        protected override void UpdatePosition()
+        protected override void RemoveEvents()
         {
+            base.RemoveEvents();
+            MOEvents.OnScroll -= UpdatePosition;
+        }
+        
+        protected override void UpdatePosition(Vector3 pointerPos)
+        {
+            Debug.Log("Scroll");
+            scaledViewportPosition = PointerEdgePositionToScrollDirection(pointerPos);
             var currentPos = thisTransform.localPosition;
             var desiredPosChange = scaledViewportPosition * tweenSetup.tweenSettings.positionDeltaMultiplier;
             newScrolledPosition = currentPos + desiredPosChange;
