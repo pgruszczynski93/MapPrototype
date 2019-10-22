@@ -21,17 +21,16 @@ namespace Code_MapOfOrders.Logic {
                 return;
 
             initialised = true;
-            tweener
+            tweener = thisTransform
+                .DOLocalMove(thisTransform.localPosition, tweenSetup.tweenSettings.tweenTime)
                 .SetAutoKill(false)
-                .SetEase(tweenSetup.tweenSettings.easeType);
+                .SetEase(tweenSetup.tweenSettings.easeType)
+                .Pause();
         }
 
         protected void PlayTween(Vector3 tweenTargetPos, Action onTweenComplete = null) {
-            tweener = thisTransform
-                .DOLocalMove(tweenTargetPos, tweenSetup.tweenSettings.tweenTime)
-                .OnComplete(() => {
-                    onTweenComplete?.Invoke(); 
-                });
+            tweener.ChangeEndValue(tweenTargetPos, true)
+                .Restart();
         }
 
         public void PauseTween() {
