@@ -56,6 +56,11 @@ namespace Code_MapOfOrders.Logic {
         }
 
         public void TryToHighlightHouse(Vector3 pointerPos) {
+
+//            if (selectedHouse) {
+//                selectedHouse.ManageSelectedHouse(HouseAction.Selected);
+//            }
+            
             selectionRay = mapOrderCamera.ScreenPointToRay(pointerPos);
             RaycastHit hitInfo;
 
@@ -74,11 +79,13 @@ namespace Code_MapOfOrders.Logic {
                 if (pointedHouse == selectedHouse)
                     return;
                 
-                Debug.Log(pointedHouse.name);
                 pointedHouse.ManageSelectedHouse(HouseAction.Highlighted);
             }
             else {
                 if (pointedHouse == null)
+                    return;
+
+                if (pointedHouse == selectedHouse)
                     return;
 
                 pointedHouse.ManageSelectedHouse(HouseAction.NotSelected);
@@ -91,6 +98,10 @@ namespace Code_MapOfOrders.Logic {
                 return;
             
             if (pointedHouse != selectedHouse) {
+                if (selectedHouse != null) {
+                    selectedHouse.isSelected = false;
+                    selectedHouse.ManageSelectedHouse(HouseAction.NotSelected);
+                }
                 selectedHouse = pointedHouse;
                 selectedHouse.ManageSelectedHouse(HouseAction.Selected);
             }

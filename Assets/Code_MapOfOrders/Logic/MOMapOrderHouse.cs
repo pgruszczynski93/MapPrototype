@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using HGTV.MapsOfOrders;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class MOMapOrderHouse : MonoBehaviour {
     [SerializeField] Material normalMaterial;
     [SerializeField] MeshRenderer renderer;
 
-    bool isHouseActive;
+    public bool isSelected;
     public HouseAction houseState;
 
     void Initialise() {
@@ -27,15 +28,22 @@ public class MOMapOrderHouse : MonoBehaviour {
     }
 
     void AssignEvents() {
-        
+        MOEvents.OnUpdate += UpdateMaterials;
     }
 
     void RemoveEvents() {
-        
+        MOEvents.OnUpdate -= UpdateMaterials;
     }
 
     void Start() {
         Initialise();
+    }
+
+    void UpdateMaterials() {
+        if (!isSelected)
+            return;
+
+        SwitchMaterials(selectionMat);
     }
 
     public void ManageSelectedHouse(HouseAction state) {
@@ -47,16 +55,21 @@ public class MOMapOrderHouse : MonoBehaviour {
                 break;
             case HouseAction.Highlighted:
                 SwitchMaterials(highlightMat);
-                isHouseActive = false;
                 break;
             case HouseAction.Selected:
-                SwitchMaterials(selectionMat);
-                ShowSelectedHouseInfo();
-                isHouseActive = true;
+                TryToSelectHouse();
                 break;
             default:
                 break;
         }
+    }
+
+    void TryToSelectHouse() {
+        if (!isSelected)
+            isSelected = true;
+        
+        SwitchMaterials(selectionMat);
+        ShowSelectedHouseInfo();
     }
 
     void ShowSelectedHouseInfo() {
