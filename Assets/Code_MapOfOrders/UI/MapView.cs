@@ -7,9 +7,12 @@ using UnityEngine.UI;
 
 namespace Code_MapOfOrders.UI {
     public class MapView : MonoBehaviour {
+        [SerializeField] RectTransform bottomBar;
         [SerializeField] InfoPanel infoPanel;
         [SerializeField] NotePanel notePanel;
         [SerializeField] Button playButton;
+
+        public RectTransform BottomBar { get => bottomBar; }
 
         public void LoadData(MOOrderHouseInfo mOMapOrderInfo) {
             infoPanel.LoadData(mOMapOrderInfo.title, mOMapOrderInfo.details);

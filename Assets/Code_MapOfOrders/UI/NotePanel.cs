@@ -10,9 +10,9 @@ namespace Code_MapOfOrders.UI {
         [SerializeField] TextMeshProUGUI areas;
 
         public void LoadData(string budgetData, int choicesData, int areasData) {
-            budget.text = budgetData;
-            choices.text = choicesData.ToString();
-            areas.text = areasData.ToString();
+            TweenUIAnimations.FadeAndUpdateText(budget, budgetData);
+            TweenUIAnimations.FadeAndUpdateText(choices, choicesData.ToString());
+            TweenUIAnimations.FadeAndUpdateText(areas, areasData.ToString());
         }
     }
 }
