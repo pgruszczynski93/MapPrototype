@@ -194,3 +194,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d72cbd987784966bd97d511480dd8a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapOfOrdersHouses:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  highlightedHouse: {fileID: 0}
+  selectedHouse: {fileID: 0}
+  mapView: {fileID: 0}
