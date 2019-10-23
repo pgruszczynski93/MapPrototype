@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Code_MapOfOrders.UI;
 using DefaultNamespace;
 using HGTV.MapsOfOrders;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Code_MapOfOrders.Logic
         [SerializeField] MOMapOrderHouse[] mapOfOrdersHouses;
         [SerializeField] MOMapOrderHouse highlightedHouse;
         [SerializeField] MOMapOrderHouse selectedHouse;
+        [SerializeField] MapView mapView;
 
         bool initialised;
         Camera mapOrderCamera;
@@ -125,7 +127,13 @@ namespace Code_MapOfOrders.Logic
             }
 
             selectedHouse = highlightedHouse;
+            DisplayData();
             selectedHouse.ManageSelectedHouse(MapSelectionType.Selection);
+        }
+
+        private void DisplayData()
+        {
+            mapView.LoadData(selectedHouse.GetHouseInfo());
         }
 
         bool CanSetCurrentlyHighlightedObject(Transform dictKey)

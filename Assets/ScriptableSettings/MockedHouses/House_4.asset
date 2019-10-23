@@ -12,4 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95c71998dce4c00a7e8868f8bf2f4cf, type: 3}
   m_Name: House_4
   m_EditorClassIdentifier: 
-  details: Domek 4
+  budget: 999 PLN
+  choices: 51
+  areas: 21
+  title: Domek 4
+  details: Erat nam at lectus urna duis convallis. Cursus turpis massa tincidunt dui
+    ut ornare lectus. Etiam dignissim diam quis enim lobortis scelerisque fermentum
+    dui faucibus. Pulvinar sapien et ligula ullamcorper malesuada proin. Egestas congue
+    quisque egestas diam in arcu cursus euismod. Laoreet non curabitur gravida arcu
+    ac tortor dignissim convallis. Urna nec tincidunt praesent semper feugiat nibh
+    sed pulvinar proin. Pretium lectus quam id leo in vitae. Facilisi etiam dignissim
+    diam quis enim lobortis scelerisque fermentum. Potenti nullam ac tortor vitae
+    purus faucibus ornare. Non consectetur a erat nam at lectus urna.

@@ -12,4 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95c71998dce4c00a7e8868f8bf2f4cf, type: 3}
   m_Name: House_2
   m_EditorClassIdentifier: 
-  details: Domek 2
+  budget: 1 PLN
+  choices: 5
+  areas: 3
+  title: Domek 2
+  details: Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+    doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
+    et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
+    quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
+    eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
+    ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius
+    modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut
+    enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
+    nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit
+    qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui
+    dolorem eum fugiat quo voluptas nulla pariatur?

@@ -53,9 +53,12 @@ public class MOMapOrderHouse : MonoBehaviour {
     }
 
     void ShowSelectedHouseInfo() {
-        Debug.Log("DETAILS: " + info.details);
+        Debug.Log("DETAILS: " + info.title);
     }
 
+    public MOOrderHouseInfo GetHouseInfo() {
+        return info;
+    }
     void SwitchMaterials(Material toChange) {
         var newMats = renderer.materials;
         for (var i = 0; i < newMats.Length; i++) {
