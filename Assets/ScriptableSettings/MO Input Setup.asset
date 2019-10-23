@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: MO Input Setup
   m_EditorClassIdentifier: 
   mouseInputSettings:
-    horizontalEdgeThicknessPercentage: 5
-    verticalEdgeThicknessPercentage: 5
+    horizontalEdgeThicknessPercentage: 0
+    verticalEdgeThicknessPercentage: 0

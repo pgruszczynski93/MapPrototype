@@ -97,7 +97,7 @@ namespace Code_MapOfOrders.Logic
             }
         }
 
-        private void TryToResetSelection(MapSelectionType mapSelectionType)
+        void TryToResetSelection(MapSelectionType mapSelectionType)
         {
             if (highlightedHouse != null && highlightedHouse != selectedHouse)
                 highlightedHouse.ManageSelectedHouse(MapSelectionType.Undefined);
@@ -111,7 +111,7 @@ namespace Code_MapOfOrders.Logic
             TweenUIAnimations.MoveDown(mapView.BottomBar);
         }
 
-        private void SetStatusOfPointedObject(MapSelectionType mapSelectionType)
+        void SetStatusOfPointedObject(MapSelectionType mapSelectionType)
         {
             if (mapSelectionType == MapSelectionType.Selection)
                 TryToSetSelectedObject();
@@ -119,7 +119,7 @@ namespace Code_MapOfOrders.Logic
                 highlightedHouse.ManageSelectedHouse(MapSelectionType.Highlight);
         }
 
-        private void TryToSetSelectedObject()
+        void TryToSetSelectedObject()
         {
             if (selectedHouse != null)
             {
@@ -135,7 +135,7 @@ namespace Code_MapOfOrders.Logic
             selectedHouse.ManageSelectedHouse(MapSelectionType.Selection);
         }
 
-        private void DisplayData()
+        void DisplayData()
         {
             mapView.LoadData(selectedHouse.GetHouseInfo());
         }

@@ -49,11 +49,6 @@ public class MOMapOrderHouse : MonoBehaviour {
             isSelected = true;
         
         SwitchMaterials(selectionMat);
-        ShowSelectedHouseInfo();
-    }
-
-    void ShowSelectedHouseInfo() {
-        Debug.Log("DETAILS: " + info.title);
     }
 
     public MOOrderHouseInfo GetHouseInfo() {
