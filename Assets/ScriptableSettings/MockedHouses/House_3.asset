@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95c71998dce4c00a7e8868f8bf2f4cf, type: 3}
   m_Name: House_3
   m_EditorClassIdentifier: 
-  budget: 666 PLN
-  choices: 99
-  areas: 88
+  budget: 983483
+  choices: 3
+  areas: 245
   title: Domek 3
   details: At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
     praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias

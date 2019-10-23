@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95c71998dce4c00a7e8868f8bf2f4cf, type: 3}
   m_Name: House_2
   m_EditorClassIdentifier: 
-  budget: 1 PLN
-  choices: 5
-  areas: 3
-  title: Domek 2
+  budget: 48781
+  choices: 4
+  areas: 24
+  title: 'Domek 2 '
   details: Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
     doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
     et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem

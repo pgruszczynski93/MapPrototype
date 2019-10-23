@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95c71998dce4c00a7e8868f8bf2f4cf, type: 3}
   m_Name: House_1
   m_EditorClassIdentifier: 
-  budget: 300000 PLN
-  choices: 3
-  areas: 5
-  title: Domek 1
+  budget: 1524
+  choices: 2
+  areas: 245
+  title: 'Domek 1 '
   details: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
     nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

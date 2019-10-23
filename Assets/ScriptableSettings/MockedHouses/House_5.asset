@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95c71998dce4c00a7e8868f8bf2f4cf, type: 3}
   m_Name: House_5
   m_EditorClassIdentifier: 
-  budget: 999999 PLN
-  choices: 0
-  areas: 0
+  budget: 787412
+  choices: 2
+  areas: 325
   title: Domek 5
   details: Egestas erat imperdiet sed euismod nisi porta lorem mollis aliquam. Quisque
     non tellus orci ac. Nisl pretium fusce id velit ut tortor. Blandit massa enim
