@@ -108,6 +108,7 @@ namespace Code_MapOfOrders.Logic
             selectedHouse.ManageSelectedHouse(MapSelectionType.Undefined);
             highlightedHouse = null;
             selectedHouse = null;
+            TweenUIAnimations.MoveDown(mapView.BottomBar);
         }
 
         private void SetStatusOfPointedObject(MapSelectionType mapSelectionType)
@@ -125,7 +126,10 @@ namespace Code_MapOfOrders.Logic
                 selectedHouse.IsSelcted = false;
                 selectedHouse.ManageSelectedHouse(MapSelectionType.Undefined);
             }
-
+            else
+            {
+                TweenUIAnimations.MoveUp(mapView.BottomBar);
+            }
             selectedHouse = highlightedHouse;
             DisplayData();
             selectedHouse.ManageSelectedHouse(MapSelectionType.Selection);

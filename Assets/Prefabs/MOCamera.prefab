@@ -202,4 +202,4 @@ MonoBehaviour:
   - {fileID: 0}
   highlightedHouse: {fileID: 0}
   selectedHouse: {fileID: 0}
-  mapView: {fileID: 0}
+  mapView: {fileID: 6596973231737469229, guid: 9ac85f50c14ece74588af0114e581697, type: 3}
