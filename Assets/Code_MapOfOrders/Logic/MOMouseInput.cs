@@ -27,6 +27,10 @@ namespace Code_MapOfOrders.Logic {
                 return;
 
             initialised = true;
+            if (inputSetup == null) {
+                Debug.LogError("No input setup asset attached!");
+                return;
+            }
             inputSettings = inputSetup.mouseInputSettings;
             var width = Screen.width;
             var height = Screen.height;
@@ -73,6 +77,13 @@ namespace Code_MapOfOrders.Logic {
             TryToBroadcastScroll();
             TryToBroadcastDrag();
             TryToBroadcastZoom();
+            TryToBroadcastExitMap();
+        }
+
+        void TryToBroadcastExitMap() {
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                MOEvents.BroadcastOnMapExit();
+            }
         }
 
         void TryToBroadcastZoom() {

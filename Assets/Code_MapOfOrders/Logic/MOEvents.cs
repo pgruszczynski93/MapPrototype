@@ -8,6 +8,7 @@ namespace DefaultNamespace
     public static class MOEvents
     {
         public static event Action OnMapStarted;
+        public static event Action OnMapExit;
         public static event Action OnUpdate;
         public static event Action OnLateUpdate;
         public static event Action<Vector3, MapSelectionType> OnSelect;
@@ -15,6 +16,9 @@ namespace DefaultNamespace
         public static event Action<Vector3> OnScroll;
         public static event Action<int> OnZoom;
 
+        public static void BroadcastOnMapExit() {
+            OnMapExit?.Invoke();
+        }
         public static void BroadcastOnSelect(Vector3 pointerPos, MapSelectionType selection)
         {
             OnSelect?.Invoke(pointerPos, selection);

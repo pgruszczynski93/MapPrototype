@@ -511,9 +511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b36c8ac214658a3b40750f25c88dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSettings:
-    horizontalEdgeThicknessPercentage: 0
-    verticalEdgeThicknessPercentage: 0
+  inputSetup: {fileID: 11400000, guid: 9a3f340fc8d2a75478175478e63daa32, type: 2}
   mainCamera: {fileID: 1787331219}
 --- !u!114 &979025781
 MonoBehaviour:
