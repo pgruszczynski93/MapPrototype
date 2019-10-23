@@ -5,6 +5,7 @@ namespace HGTV.MapsOfOrders {
     
     [System.Serializable]
     public struct MOMouseInputSettings {
-        [Range(1f, 10f)] public int edgeThickness;
+        [Range(0f, 10f)] public float horizontalEdgeThicknessPercentage;
+        [Range(0f, 10f)] public float verticalEdgeThicknessPercentage;
     }
 }

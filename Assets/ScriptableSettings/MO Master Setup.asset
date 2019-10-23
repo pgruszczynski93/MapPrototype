@@ -10,7 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28950f9e3c3a44cf8273bbcc082d661f, type: 3}
-  m_Name: MOMasterSetup
+  m_Name: MO Master Setup
   m_EditorClassIdentifier: 
   cameraSetup: {fileID: 11400000, guid: 15a526cdea9e4b5419d9430b91b22eb0, type: 2}
-  inputSetup: {fileID: 11400000, guid: 592339f831f82eb4b9698946bfdcd772, type: 2}

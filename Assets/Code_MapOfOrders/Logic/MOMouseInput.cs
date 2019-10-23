@@ -1,62 +1,69 @@
 using System;
+using System.Threading;
 using DefaultNamespace;
 using HGTV.MapsOfOrders;
 using UnityEngine;
 
-namespace Code_MapOfOrders.Logic
-{
-    public class MOMouseInput : MonoBehaviour
-    {
+namespace Code_MapOfOrders.Logic {
+    public class MOMouseInput : MonoBehaviour {
         readonly Vector3 VectorZero = Vector3.zero;
 
-        [Range(1, 10), SerializeField] float screenBorder;
+        [SerializeField] MOMouseInputSetup inputSetup;
         [SerializeField] Camera mainCamera;
 
         bool initialised;
 
         Vector2 mouseMovementDimensions;
-        Vector2 mouseMovementBorders;
 
         Vector3 mousePosition;
         Vector3 lastMousePointerPosition;
         Vector3 mouseMovementDelta;
 
-        void Initialise()
-        {
+        Vector2[] mouseMovementBorders;
+        MOMouseInputSettings inputSettings;
+
+        void Initialise() {
             if (initialised)
                 return;
 
             initialised = true;
-            mouseMovementBorders = new Vector3(Screen.width - screenBorder, Screen.height - screenBorder);
+            inputSettings = inputSetup.mouseInputSettings;
+            var width = Screen.width;
+            var height = Screen.height;
+            var horizontalViewportMin =
+                Mathf.RoundToInt(width * (inputSettings.horizontalEdgeThicknessPercentage * MOConsts.PERCENTAGE));
+            var horizontalViewportMax = width - horizontalViewportMin;
+            var verticalViewportMin =
+                Mathf.RoundToInt(height * (inputSettings.verticalEdgeThicknessPercentage * MOConsts.PERCENTAGE));
+            var verticalViewportMax = height - verticalViewportMin;
+
+            mouseMovementBorders = new[] {
+                new Vector2(horizontalViewportMin, verticalViewportMin),
+                new Vector2(horizontalViewportMax, verticalViewportMax),
+            };
         }
 
-        void Start()
-        {
+        void Start() {
             Initialise();
         }
 
-        void OnEnable()
-        {
+        void OnEnable() {
             AssignEvents();
         }
 
-        void OnDisable()
-        {
+        void OnDisable() {
             RemoveEvents();
         }
 
-        void AssignEvents()
-        {
+        void AssignEvents() {
             MOEvents.OnUpdate += TryToFetchMouseActions;
         }
 
-        void RemoveEvents()
-        {
+        void RemoveEvents() {
             MOEvents.OnUpdate -= TryToFetchMouseActions;
         }
 
-        void TryToFetchMouseActions()
-        {
+        void TryToFetchMouseActions() {
             if (!IsMousePresent())
                 return;
 
@@ -68,8 +75,7 @@ namespace Code_MapOfOrders.Logic
             TryToBroadcastZoom();
         }
 
-        void TryToBroadcastZoom()
-        {
+        void TryToBroadcastZoom() {
             var scrollDelta = (int) Input.mouseScrollDelta.y;
             if (scrollDelta == 0)
                 return;
@@ -77,8 +83,7 @@ namespace Code_MapOfOrders.Logic
             MOEvents.BroadcastOnZoom(scrollDelta);
         }
 
-        void TryToBroadcastSelection()
-        {
+        void TryToBroadcastSelection() {
             MOEvents.BroadcastOnSelect(mousePosition, MapSelectionType.Highlight);
 
             if (!IsSelectionButtonPressed())
@@ -87,18 +92,15 @@ namespace Code_MapOfOrders.Logic
             MOEvents.BroadcastOnSelect(mousePosition, MapSelectionType.Selection);
         }
 
-        void TryToBroadcastScroll()
-        {
+        void TryToBroadcastScroll() {
             if (!CanCollectMapScrollMovementInput() || IsMouseInScreenCoords())
                 return;
 
             MOEvents.BroadcastOnScroll(mainCamera.ScreenToViewportPoint(mousePosition));
         }
 
-        void TryToBroadcastDrag()
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
+        void TryToBroadcastDrag() {
+            if (Input.GetMouseButtonDown(1)) {
                 lastMousePointerPosition = mousePosition;
                 return;
             }
@@ -111,36 +113,30 @@ namespace Code_MapOfOrders.Logic
             lastMousePointerPosition = mousePosition;
         }
 
-        bool IsMouseInScreenCoords()
-        {
-            return mousePosition.x > 0
-                   && mousePosition.x < mouseMovementBorders.x
-                   && mousePosition.y > 0
-                   && mousePosition.y < mouseMovementBorders.y;
+        bool IsMouseInScreenCoords() {
+            return mousePosition.x > mouseMovementBorders[0].x
+                   && mousePosition.x < mouseMovementBorders[1].x
+                   && mousePosition.y > mouseMovementBorders[0].y
+                   && mousePosition.y < mouseMovementBorders[1].y;
         }
 
-        bool IsMousePresent()
-        {
+        bool IsMousePresent() {
             return Input.mousePresent;
         }
 
-        bool IsSelectionButtonPressed()
-        {
+        bool IsSelectionButtonPressed() {
             return Input.GetMouseButtonDown(0);
         }
 
-        bool IsSelectionButtonReleased()
-        {
+        bool IsSelectionButtonReleased() {
             return Input.GetMouseButtonUp(1);
         }
 
-        bool CanCollectMapScrollMovementInput()
-        {
+        bool CanCollectMapScrollMovementInput() {
             return IsMousePresent() && !IsAnyNonScrollButtonPressed();
         }
 
-        bool IsAnyNonScrollButtonPressed()
-        {
+        bool IsAnyNonScrollButtonPressed() {
             return Input.GetMouseButton(0) || Input.GetMouseButton(1);
         }
     }

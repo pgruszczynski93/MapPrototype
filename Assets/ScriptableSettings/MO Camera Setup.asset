@@ -10,22 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e98f5b334ab9394d9d73f20d42f0947, type: 3}
-  m_Name: MOCameraSetup
+  m_Name: MO Camera Setup
   m_EditorClassIdentifier: 
   cameraSettings:
     maxZoomValue: 15
     cameraFov: 60
-    dragTweenProperties:
-      easeType: 6
-      tweenTime: 0.3
-      positionDeltaMultiplier: 200
-    scrollTweenProperties:
-      easeType: 3
-      tweenTime: 0.6
-      positionDeltaMultiplier: 10
-    zoomTweenProperties:
-      easeType: 27
-      tweenTime: 0.2
-      positionDeltaMultiplier: 5
     cameraMapSpawnPosition: {x: 10, y: 20, z: 0}
     cameraLookAtAngle: {x: 55, y: 355, z: 0}

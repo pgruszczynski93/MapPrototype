@@ -135,7 +135,8 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 81572280}
-  houseState: 0
+  isSelected: 0
+  mapSelectionType: 0
 --- !u!65 &81572278
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -247,7 +248,8 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 287569091}
-  houseState: 0
+  isSelected: 0
+  mapSelectionType: 0
 --- !u!65 &287569089
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -509,13 +511,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874b36c8ac214658a3b40750f25c88dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenBorder: 5
+  inputSettings:
+    horizontalEdgeThicknessPercentage: 0
+    verticalEdgeThicknessPercentage: 0
   mainCamera: {fileID: 1787331219}
-  inputData:
-    mouseAction: 0
-    scrollValue: 0
-    pointerPosition: {x: 0, y: 0}
-    pointerActionPosition: {x: 0, y: 0}
 --- !u!114 &979025781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,7 +564,8 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 1095247973}
-  houseState: 0
+  isSelected: 0
+  mapSelectionType: 0
 --- !u!65 &1095247971
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -652,7 +652,8 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 1384684460}
-  houseState: 0
+  isSelected: 0
+  mapSelectionType: 0
 --- !u!65 &1384684458
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -832,7 +833,8 @@ MonoBehaviour:
   selectionMat: {fileID: 2100000, guid: b1bf7d30b06fa0e4ca0dc05c5be30427, type: 2}
   normalMaterial: {fileID: 2100000, guid: 6b6f119bf30cef948be9f55a1937012e, type: 2}
   renderer: {fileID: 1742031467}
-  houseState: 0
+  isSelected: 0
+  mapSelectionType: 0
 --- !u!65 &1742031465
 BoxCollider:
   m_ObjectHideFlags: 0
